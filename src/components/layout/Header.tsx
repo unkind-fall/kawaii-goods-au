@@ -2,7 +2,11 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+
+import { TRENDING_SEARCH_TERMS } from "@/lib/data/sample";
+import { applySynonyms } from "@/lib/search/logic";
 
 type NavItem = { label: string; href: string };
 
@@ -208,7 +212,53 @@ function MegaMenu() {
 }
 
 function Search({ testId }: { testId?: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
+
   const [focused, setFocused] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const fetchAbortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    fetchAbortRef.current?.abort();
+    const ac = new AbortController();
+    fetchAbortRef.current = ac;
+
+    const run = async () => {
+      if (!q.trim()) {
+        setSuggestions(TRENDING_SEARCH_TERMS.slice(0, 5));
+        return;
+      }
+      const res = await fetch(`/api/search/suggest?q=${encodeURIComponent(q)}`, { signal: ac.signal });
+      const data = (await res.json()) as { suggestions: string[] };
+      setSuggestions(data.suggestions);
+    };
+
+    void run();
+    return () => ac.abort();
+  }, [open, q]);
+
+  function submit(nextQ: string) {
+    const normalized = applySynonyms(nextQ);
+    const sp = new URLSearchParams(params.toString());
+    sp.set("q", normalized);
+    // Keep any existing product filters in URL when searching.
+    router.push(pathname === "/products" ? `/products?${sp.toString()}` : `/products?${sp.toString()}`);
+
+    try {
+      const key = "kawaii_recent_searches";
+      const prev = JSON.parse(localStorage.getItem(key) ?? "[]") as string[];
+      const merged = [normalized, ...prev.filter((x) => x !== normalized)].slice(0, 8);
+      localStorage.setItem(key, JSON.stringify(merged));
+    } catch {
+      // ignore
+    }
+  }
 
   return (
     <div className="w-full max-w-md">
@@ -228,10 +278,51 @@ function Search({ testId }: { testId?: string }) {
           aria-label="Search products"
           placeholder="Search cute things..."
           className="w-full bg-transparent text-sm outline-none placeholder:text-foreground/50"
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onFocus={() => {
+            setFocused(true);
+            setOpen(true);
+          }}
+          onBlur={() => {
+            setFocused(false);
+            // Delay close so click on suggestion works
+            window.setTimeout(() => setOpen(false), 120);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") submit(q);
+          }}
         />
       </motion.div>
+
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            initial={{ opacity: 0, y: 6, scale: 0.99 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: 0.99 }}
+            transition={{ type: "spring", stiffness: 260, damping: 24 }}
+            className="relative"
+          >
+            <div className="absolute left-0 right-0 mt-2 overflow-hidden rounded-kawaii-lg bg-white/90 shadow-kawaii ring-1 ring-kawaii-pink/30">
+              <ul data-testid="search-suggestions" className="grid">
+                {suggestions.slice(0, 5).map((s) => (
+                  <li key={s}>
+                    <button
+                      type="button"
+                      className="w-full px-4 py-3 text-left text-sm hover:bg-kawaii-cream"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => submit(s)}
+                    >
+                      {s}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
