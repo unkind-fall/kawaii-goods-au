@@ -45,7 +45,7 @@ Study these sites for the authentic Japanese "fancy goods" aesthetic:
 
 ---
 
-# Test-Driven Development Strategy
+# Test-Driven Development Strategy (200+ Tests)
 
 ## Suite 1: Global "Kawaii" UI & Layout (30 Tests)
 *Focus: The "atmosphere" is created by rounded corners, soft shadows, and specific layouts.*
@@ -93,338 +93,213 @@ Study these sites for the authentic Japanese "fancy goods" aesthetic:
 ## Suite 2: The Character System (40 Tests)
 *Focus: Unlike standard e-commerce, these sites are "Wikis" for characters.*
 
-### Character Pages
-31. [E2E] Character landing page loads with hero image/animation.
-32. [E2E] Character page shows bio, birthday, and personality traits.
-33. [Unit] Character color theme applies to page accents dynamically.
-34. [E2E] "Shop by Character" filter works correctly.
-35. [E2E] Character mascot appears on related product cards.
-36. [Unit] Character data fetches from CMS correctly.
-37. [E2E] Character page has meta tags for SEO (og:image, description).
-38. [Vis] Character page maintains brand consistency with main site.
+### Character Index Page
+31. [E2E] Grid renders all characters fetched from API.
+32. [Unit] Clicking a character card routes to /character/[slug].
+33. [Unit] Character filter (e.g., "Main", "Sub-character") updates the grid.
+34. [Vis] Character cards have a "hover lift" animation (translate-y-2).
+35. [Unit] Empty search results show a specific "Sad Mascot" state.
+36. [E2E] Infinite scroll or "Load More" loads next batch of 20 characters.
+37. [Vis] Images lazy-load with a blur placeholder.
 
-### Character Navigation
-39. [E2E] Character carousel on homepage is swipeable on mobile.
-40. [E2E] Character carousel has keyboard navigation (arrow keys).
-41. [Unit] Character icons have hover animations (bounce/wiggle).
-42. [E2E] Clicking character icon filters products by that character.
-43. [E2E] Active character filter shows visual indicator.
+### Character Detail Page (The "Shrine")
+38. [E2E] Page title matches Character Name (SEO).
+39. [Unit] "Birthday" and "Interests" fields render if data exists.
+40. [Unit] "Related Friends" section renders linked character cards.
+41. [Unit] "Related Products" section filters store items by character tag.
+42. [Unit] "Download Wallpapers" button works (if authenticated).
+43. [Unit] "Next/Prev Character" navigation links are present.
+44. [Vis] Hero banner background color matches character hex code (dynamic styling).
+45. [E2E] "Share" button copies specific URL with UTM params.
+46. [Unit] Character description truncates at 3 lines with "Read More".
+47. [Unit] "Read More" expands text without page reload.
+48. [E2E] Embedded YouTube video (if any) pauses when out of viewport.
+49. [Unit] Breadcrumbs show Home > Characters > [Name].
+50. [E2E] Character specific "News" feed loads correct articles.
 
-### Character Collections
-44. [E2E] "New Characters" section highlights recent additions.
-45. [E2E] "Popular Characters" section based on view/purchase data.
-46. [Unit] Character grouping by franchise works (Sanrio, San-X, etc.).
-47. [E2E] Character search/autocomplete works.
-48. [E2E] Character page shows related characters (same franchise).
-
-### Character Details
-49. [Unit] Character birthday displays correctly with zodiac.
-50. [E2E] Character "friends" section links to other character pages.
-51. [Unit] Character trivia/facts section renders markdown correctly.
-52. [E2E] Character product count updates dynamically.
-53. [Vis] Character pages use character's signature colors.
-54. [E2E] Character page breadcrumbs work correctly.
-
-### Character Data Management
-55. [Unit] CMS can add/edit/delete characters.
-56. [Unit] Character images have proper alt text.
-57. [E2E] Character with no products shows appropriate message.
-58. [Unit] Character slug generation is consistent and URL-safe.
-59. [E2E] Duplicate character slugs are prevented.
-60. [Unit] Character popularity score calculates correctly.
-
-### Character Animations
-61. [E2E] Character mascots have idle animations (subtle).
-62. [Unit] Animations respect reduced-motion preference.
-63. [E2E] Character hover effects are smooth (no jank).
-64. [Vis] Character sprites/images are crisp at all sizes.
-65. [E2E] Character loading states show skeleton with character shape.
-
-### Character Favorites
-66. [E2E] Users can favorite characters (stored locally).
-67. [E2E] Favorited characters appear in user's "My Characters" section.
-68. [Unit] Favorite state persists across sessions.
-69. [E2E] Favorite toggle has heart animation.
-70. [E2E] "Shop My Characters" shows products from favorited characters only.
+### Interactive Elements
+51. [Unit] "Like" or "Vote" for character updates local count optimistically.
+52. [E2E] "Like" persists to local storage (for guest users).
+53. [E2E] Character "stamps" or decorative SVGs float in background.
+54. [Vis] Text outlines (common in JP design) render correctly in CSS.
+55. [Unit] Ruby characters (Furigana) render correctly for kids (optional).
+56-70. [Vis] Visual regression tests for top 15 main characters to ensure no layout breaks on long names.
 
 ---
 
-## Suite 3: Product Display & Cards (35 Tests)
-*Focus: Product cards are the heart of e-commerce.*
-
-### Product Card Component
-71. [Vis] Product cards have consistent border-radius (rounded-2xl).
-72. [Unit] Product card shows: image, name, price, character badge.
-73. [E2E] Product card hover lifts with shadow and slight scale.
-74. [Unit] "Sale" badge shows percentage and strikethrough price.
-75. [Unit] "New" badge appears for products added in last 14 days.
-76. [Unit] "Low Stock" badge appears when inventory < 5.
-77. [E2E] Product card image lazy loads with blur placeholder.
-78. [Unit] Product card truncates long names with ellipsis.
-79. [E2E] Quick view modal opens on "eye" icon click.
-80. [E2E] Add to cart from card shows success animation.
+## Suite 3: E-Commerce Product Catalog (30 Tests)
+*Focus: High density, clear prices, "New Arrival" emphasis.*
 
 ### Product Grid
-81. [E2E] Grid is responsive (4-3-2-1 columns breakpoints).
-82. [Unit] Grid gap is consistent across breakpoints.
-83. [E2E] Infinite scroll loads more products smoothly.
-84. [E2E] "Load More" button alternative to infinite scroll.
-85. [Unit] Product count displays correctly ("Showing 1-24 of 156").
-86. [E2E] Empty grid shows friendly "no products" message with mascot.
+71. [Unit] Product Card shows: Image, Name, Price, "New" Badge, Fav Button.
+72. [Unit] Price formats correctly (¥1,000 or $10.00 AUD).
+73. [Unit] "Sold Out" badge overlays and grays out image.
+74. [E2E] Hovering product image swaps to 2nd image (Effect: "Quick Look").
+75. [Unit] Clicking "Quick Add" opens drawer, does not navigate.
+76. [E2E] Filtering by "Category" (Stationery, Plush) updates URL params.
+77. [E2E] Filtering by "Price Range" updates grid.
+78. [E2E] Sorting by "Newest" is default.
+79. [Unit] Sorting by "Price: Low to High" reorders correctly.
+80. [Unit] Pagination allows navigating to specific page numbers.
 
-### Product Images
-87. [Unit] Product images use Next.js Image optimization.
-88. [E2E] Multiple product images cycle on hover.
-89. [Unit] Alt text includes product name and character.
-90. [E2E] Image zoom works on product detail page.
-91. [Vis] Images maintain aspect ratio (no squishing).
-92. [E2E] Missing images show kawaii placeholder.
+### Search Logic
+81. [E2E] Search handles synonyms (e.g., "Kitty" -> "Hello Kitty").
+82. [E2E] Search maintains filters (e.g., "Plush" + Search "Bear").
+83. [Unit] Search bar suggests top 5 trending terms on focus.
+84. [E2E] Recent search terms are saved to local history.
+85. [Unit] Search result count is displayed accurately.
 
-### Product Variants
-93. [Unit] Color swatches display on card when applicable.
-94. [E2E] Clicking swatch updates card image.
-95. [Unit] Size options show on hover (if applicable).
-96. [E2E] Out of stock variant is visually distinct (crossed out).
-97. [Unit] Variant price differences display correctly.
-
-### Product Badges & Labels
-98. [Unit] Badges stack correctly (max 2 visible, "+1" for more).
-99. [Vis] Badge colors are consistent (red=sale, green=new, etc.).
-100. [Unit] "Pre-order" badge shows estimated date.
-101. [E2E] "Exclusive" badge links to exclusives collection.
-102. [Unit] Badge animations don't distract from content.
-
-### Wishlist Integration
-103. [E2E] Heart icon toggles wishlist status.
-104. [Unit] Wishlist count updates in header.
-105. [E2E] Wishlist works without login (local storage).
-
----
-
-## Suite 4: Product Detail Page (30 Tests)
-*Focus: The detail page must convince and delight.*
-
-### Product Information
-106. [E2E] Product name, price, and description render correctly.
-107. [Unit] Breadcrumbs show: Home > Category > Character > Product.
-108. [E2E] "Share" buttons work for social platforms.
-109. [Unit] SKU/Product code displays.
-110. [E2E] Product dimensions/weight info available (for shipping calc).
-111. [Unit] Material/care instructions shown when applicable.
-
-### Image Gallery
-112. [E2E] Main image changes when thumbnail clicked.
-113. [E2E] Image gallery supports pinch-zoom on mobile.
-114. [E2E] Lightbox opens on image click (desktop).
-115. [E2E] Swipe between images in lightbox.
-116. [Unit] Thumbnails have active state indicator.
-
-### Add to Cart
-117. [E2E] Quantity selector increments/decrements correctly.
-118. [Unit] Quantity cannot go below 1.
-119. [E2E] "Add to Cart" disabled when out of stock.
-120. [E2E] Success toast appears after adding to cart.
-121. [Unit] Cart icon in header shows updated count.
-
-### Variants & Options
-122. [E2E] Selecting variant updates price and image.
-123. [Unit] Out of stock variants are selectable but show notice.
-124. [E2E] "Notify when available" captures email.
-125. [Unit] Selected variant persists in URL for sharing.
-
-### Related Products
-126. [E2E] "You might also like" shows 4-6 related products.
-127. [Unit] Related products are from same character or category.
-128. [E2E] "Complete the set" section for product bundles.
-
-### Reviews & Ratings
-129. [E2E] Star rating displays with count.
-130. [Unit] Review summary shows breakdown (5★, 4★, etc.).
-131. [E2E] "Write a review" form validates inputs.
-132. [E2E] Review photos upload and display correctly.
-133. [Unit] Helpful/Not helpful voting works.
-134. [E2E] Reviews paginate after 10 entries.
-135. [Unit] Verified purchase badge shows correctly.
+### Product Detail Page (PDP)
+86. [Vis] Image Gallery supports swipe gestures on mobile.
+87. [Unit] Image Gallery supports thumbnail clicks on desktop.
+88. [Unit] Zoom lens appears on hover (desktop).
+89. [Unit] Selecting "Size" variant updates price/availability.
+90. [Unit] "Add to Cart" button disabled if variant not selected.
+91. [E2E] "Add to Cart" triggers "flying item" animation to cart icon.
+92. [Unit] Stock status (Low Stock) displays threshold logic (e.g., "Only 3 left!").
+93. [Unit] SKU/Product Code is visible (for support).
+94. [Unit] "Shipping Date" estimate is calculated based on current time.
+95. [E2E] "Frequently Bought Together" items add multiple to cart.
+96. [Unit] Accordion for "Materials/Care" starts collapsed.
+97. [Unit] Reviews section renders star rating average.
+98. [E2E] Clicking a review image opens a lightbox.
+99. [Unit] "Restock Notification" form appears for sold-out items.
+100. [Unit] Limit per customer logic (e.g., "Max 2 per person") enforces on click.
 
 ---
 
-## Suite 5: Shopping Cart & Checkout (35 Tests)
-*Focus: Frictionless path to purchase.*
+## Suite 4: Cart & Checkout (30 Tests)
+*Focus: Trust, clarity, and payment preferences.*
 
-### Cart Sidebar/Page
-136. [E2E] Cart opens as sidebar on desktop.
-137. [E2E] Cart is full page on mobile.
-138. [Unit] Cart items show image, name, quantity, price, subtotal.
-139. [E2E] Quantity can be updated in cart.
-140. [E2E] Remove item shows confirmation or undo option.
-141. [Unit] Cart subtotal calculates correctly.
-142. [E2E] Empty cart shows friendly message and "continue shopping".
-
-### Cart Features
-143. [E2E] "Save for later" moves item to wishlist.
-144. [Unit] Cart persists across sessions (localStorage/auth).
-145. [E2E] Promo code field validates and applies discount.
-146. [Unit] Invalid promo code shows clear error.
-147. [E2E] Free shipping threshold shows progress bar.
-148. [Unit] Cart shows estimated delivery date range.
+### Cart Drawer/Page
+101. [E2E] Cart count badge updates immediately after add.
+102. [Unit] Cart items persist on page reload (localStorage or DB).
+103. [Unit] Updating quantity to 0 removes item.
+104. [Unit] Updating quantity updates Subtotal.
+105. [Unit] "Free Shipping" progress bar updates (e.g., "$50 more for free ship").
+106. [E2E] Cart drawer closes on outside click.
+107. [Unit] "Out of stock" items in cart (stale session) show alert.
 
 ### Checkout Flow
-149. [E2E] Guest checkout available (no account required).
-150. [E2E] Shipping address form validates Australian postcodes.
-151. [E2E] Suburb auto-suggests from postcode.
-152. [Unit] Shipping cost calculates based on location/weight.
-153. [E2E] Multiple shipping options available (standard, express).
-154. [Unit] Order summary updates in real-time.
-
-### Payment
-155. [E2E] Stripe payment integration works.
-156. [E2E] PayPal option available.
-157. [E2E] Afterpay/Zip available for orders $50-$1000.
-158. [Unit] Card validation follows Stripe best practices.
-159. [E2E] Payment error shows clear message and retry option.
-160. [Unit] Order confirmation number generated correctly.
-
-### Post-Purchase
-161. [E2E] Confirmation page shows order details and "cute" thank you.
-162. [E2E] Confirmation email sends (testable via mock).
-163. [Unit] Order saved to database with correct status.
-164. [E2E] "Track Order" link works in confirmation.
-165. [Unit] Inventory decrements after successful purchase.
-
-### Cart Edge Cases
-166. [E2E] Cart handles item going out of stock gracefully.
-167. [Unit] Cart validates max quantity limits.
-168. [E2E] Currency displays correctly (AUD with $).
-169. [E2E] Cart syncs across tabs (if logged in).
-170. [Unit] Tax calculation follows Australian GST rules.
+108. [E2E] Guest Checkout option is available.
+109. [Unit] Address validator checks Australian postal code format.
+110. [Unit] Auto-fill suburb from Australian postal code.
+111. [Unit] Phone number validation (Australian format).
+112. [Unit] "Same as shipping" checkbox copies address to billing.
+113. [E2E] Coupon code field accepts valid codes.
+114. [E2E] Coupon code field rejects invalid codes with error.
+115. [Unit] Shipping method selection updates Total Price.
+116. [E2E] Payment Step: Credit Card form uses Stripe/PCI elements.
+117. [E2E] Payment Step: Afterpay/Zip option displays for $50-$1000 orders.
+118. [E2E] Order Summary is visible on all steps.
+119. [E2E] "Place Order" button prevents double-click submissions.
+120. [E2E] Success page displays Order ID.
+121. [E2E] Success page triggers "Confetti" animation.
+122. [Unit] Confirmation email is triggered (mocked).
+123-130. [E2E] Edge cases: Declined card, Network timeout, Inventory seized by another user during checkout.
 
 ---
 
-## Suite 6: Search & Filtering (25 Tests)
-*Focus: Finding the perfect Cinnamoroll stationery set.*
-
-### Search
-171. [E2E] Search bar autocomplete shows suggestions.
-172. [E2E] Search results page loads quickly (<200ms perceived).
-173. [Unit] Search indexes product name, description, character, category.
-174. [E2E] Fuzzy matching works ("cinnamon roll" finds "Cinnamoroll").
-175. [E2E] Search highlights matching terms in results.
-176. [Unit] Recent searches saved and displayed.
-177. [E2E] "No results" page suggests alternatives.
-
-### Filters
-178. [E2E] Category filter updates results without page reload.
-179. [E2E] Character filter works with multiple selections.
-180. [E2E] Price range slider filters correctly.
-181. [Unit] Filter counts show available products.
-182. [E2E] "Clear all filters" resets to default.
-183. [E2E] Active filters shown as removable tags.
-
-### Sorting
-184. [E2E] Sort by: Newest, Price (low/high), Popularity, Name.
-185. [Unit] Default sort is "Newest" or "Recommended".
-186. [E2E] Sort preference persists during session.
-
-### URL State
-187. [E2E] Filters reflect in URL for sharing/bookmarking.
-188. [E2E] Browser back button restores previous filter state.
-189. [Unit] Deep linking to filtered view works.
-
-### Search UX
-190. [E2E] Mobile search is full-screen overlay.
-191. [Unit] Search debounces input (300ms).
-192. [E2E] Search works with Japanese characters.
-193. [E2E] Voice search available on supported browsers.
-194. [Unit] Search analytics tracks popular queries.
-195. [E2E] "Did you mean?" for typos.
-
----
-
-## Suite 7: User Account & Auth (25 Tests)
-*Focus: Optional but beneficial user accounts.*
+## Suite 5: User Account & "Fun" Features (20 Tests)
+*Focus: Gamification (Pokemon Center style) and Loyalty.*
 
 ### Authentication
-196. [E2E] Sign up form validates email and password strength.
-197. [E2E] Login works with email/password.
-198. [E2E] Social login available (Google, Apple).
-199. [E2E] "Forgot password" flow sends reset email.
-200. [Unit] Password reset token expires correctly.
-201. [E2E] Session persists appropriately (remember me).
+131. [E2E] Login with Email/Password works.
+132. [E2E] Login with Social (Google/Apple) works.
+133. [E2E] Password Reset flow sends email.
+134. [Unit] Session expires after 30 days (Remember Me).
 
-### Account Dashboard
-202. [E2E] Dashboard shows recent orders.
-203. [E2E] Order history with status tracking.
-204. [E2E] Address book for saved addresses.
-205. [E2E] Payment methods management.
-206. [Unit] Account deletion GDPR compliant.
+### My Page / Dashboard
+135. [Unit] User can set a "Favorite Character" (changes theme).
+136. [Unit] Order History lists past orders.
+137. [E2E] Order Detail page shows tracking number (if shipped).
+138. [Unit] Wishlist allows moving items to Cart.
 
-### Wishlist
-207. [E2E] Wishlist page lists all saved items.
-208. [E2E] Add to cart from wishlist works.
-209. [E2E] Wishlist shareable via link.
-210. [Unit] Wishlist syncs when user logs in.
+### Points System
+139. [Unit] Points accrue at set rate (e.g., 1%).
+140. [Unit] Points can be applied at checkout slider.
+141. [Unit] Points history shows earn/spend events.
+142. [Unit] Birthday coupon generates on birth month.
 
-### Profile
-211. [E2E] Profile edit (name, email, avatar).
-212. [E2E] Communication preferences toggleable.
-213. [Unit] Password change requires current password.
-214. [E2E] Order notifications configurable.
-
-### Account Features
-215. [E2E] "My Characters" shows favorited characters.
-216. [E2E] Purchase history shows reorder button.
-217. [Unit] Loyalty points display (if applicable).
-218. [E2E] Account page mobile responsive.
-219. [E2E] Logout clears session correctly.
-220. [Unit] Account creation triggers welcome email.
+### News/Blog
+143. [Unit] News list filters by "Event", "Goods", "Campaign".
+144. [Unit] Date format is DD.MM.YYYY (AU Standard).
+145. [E2E] "New" badge disappears after 7 days.
+146. [Unit] Related characters linked in news articles.
+147. [E2E] RSS Feed/Atom is valid (for aggregators).
+148-150. [Unit] Newsletter preferences, unsubscribe flow, email validation.
 
 ---
 
-## Suite 8: Performance & Accessibility (30 Tests)
-*Focus: Fast and usable by everyone.*
+## Suite 6: Performance & Quality Assurance (20 Tests)
+*Focus: These sites are heavy. Use Cloudflare & Next.js Image optimization.*
 
-### Performance
-221. [Perf] Largest Contentful Paint < 2.5s.
-222. [Perf] First Input Delay < 100ms.
-223. [Perf] Cumulative Layout Shift < 0.1.
-224. [Perf] Time to Interactive < 3.5s.
-225. [Unit] Images served in WebP/AVIF format.
-226. [Unit] JavaScript bundle < 200KB (gzipped).
-227. [Perf] Homepage loads in < 3s on 3G.
-228. [Unit] Fonts preloaded and display:swap used.
-229. [E2E] Service worker caches static assets.
-230. [Perf] API responses < 200ms (p95).
+### Core Web Vitals
+151. [Perf] LCP (Largest Contentful Paint) < 2.5s on 3G.
+152. [Perf] CLS (Cumulative Layout Shift) < 0.1.
+153. [Perf] FID (First Input Delay) < 100ms.
+154. [Perf] First Load JS bundle size < 200kb.
+155. [Perf] Images use WebP/AVIF formats.
 
-### Accessibility
-231. [A11y] All images have meaningful alt text.
-232. [A11y] Color contrast meets WCAG AA (4.5:1).
-233. [A11y] Focus indicators visible on all interactive elements.
-234. [A11y] Skip to content link available.
-235. [A11y] Form inputs have associated labels.
-236. [A11y] Error messages announced to screen readers.
-237. [A11y] Modals trap focus correctly.
-238. [A11y] ARIA landmarks used appropriately.
-239. [E2E] Full keyboard navigation possible.
-240. [A11y] Reduced motion respected for animations.
+### SEO & Meta
+156. [Unit] All pages have canonical URLs.
+157. [Unit] OpenGraph (OG) images are generated dynamically for Products.
+158. [Unit] Twitter Card data is present.
+159. [Unit] robots.txt allows indexing of products, blocks checkout.
+160. [Unit] Structured Data (JSON-LD) for Products is valid (Price, Stock).
+161. [Unit] Structured Data for Breadcrumbs is valid.
 
-### SEO
-241. [Unit] Meta titles unique and < 60 chars.
-242. [Unit] Meta descriptions unique and < 160 chars.
-243. [E2E] Sitemap.xml generated correctly.
-244. [E2E] Robots.txt configured appropriately.
-245. [Unit] Canonical URLs set on all pages.
-246. [E2E] Structured data (JSON-LD) for products.
-247. [E2E] Open Graph tags for social sharing.
-248. [Unit] Heading hierarchy (h1-h6) correct on all pages.
+### Accessibility (A11y)
+162. [A11y] All images have alt text (Characters describe appearance).
+163. [A11y] Color contrast ratio > 4.5:1 for text.
+164. [A11y] Focus rings are visible on keyboard navigation.
+165. [A11y] Screen readers announce "Cart Updated" dynamically (aria-live).
+166. [A11y] Carousel controls are focusable.
 
-### Edge Cases & Error Handling
-249. [E2E] 404 page is styled and helpful.
-250. [E2E] 500 error page displays gracefully.
-251. [E2E] Offline page available (PWA).
-252. [Unit] API errors show user-friendly messages.
-253. [E2E] Slow network shows loading states (not frozen UI).
-254. [Unit] Form submission prevents double-submit.
-255. [E2E] Session timeout handled gracefully.
+### Store Locator (Optional)
+167. [Unit] "Find Store" uses Geolocation API.
+168. [Unit] Map pins cluster correctly.
+169. [Unit] Store detail page shows Opening Hours.
+170. [Unit] QR Code generator for "Member ID" renders.
+
+---
+
+## Suite 7: The "San-X" Vibe Check (30 Tests)
+*Focus: The specific "soft" feel that makes Japanese sites special.*
+
+### Animations & Micro-interactions
+171. [Vis] Verify all modals have "bounce" entrance animation.
+172. [Vis] Verify buttons have "squish" scale effect on click (scale: 0.95).
+173. [Vis] Verify page transitions fade/slide (AnimatePresence).
+174. [Vis] Verify "Sparkle" effects on "Ultra Rare" items.
+175. [Vis] Background parallax speed is subtle (not nauseating).
+176. [Unit] Seasonal themes (Sakura, Halloween) toggle via Config.
+177. [Vis] Font weight is never "Bold" (700), prefer "Medium" (500) for softness.
+178. [Vis] Drop shadows are colored (e.g., light pink shadow, not black).
+179. [Vis] Borders are border-2 or border-4 for cartoon look.
+
+### Component Visual Tests
+180. [Vis] Nav Icon states (default, hover, active).
+181. [Vis] Footer Mascot renders correctly.
+182. [Vis] Cart Empty State with cute illustration.
+183. [Vis] Search Loading State with bouncing dots.
+184. [Vis] Error Toast with sad mascot.
+185. [Vis] Success Toast with happy mascot.
+186. [Vis] Tooltip styling (rounded, soft shadow).
+187. [Vis] Dropdown menu animations.
+188. [Vis] Toggle Switch with smooth transition.
+189. [Vis] Checkbox with custom kawaii checkmark.
+190. [Vis] Radio button with filled dot animation.
+191. [Vis] Input Error state (pink border, shake).
+192. [Vis] Input Focus state (glow effect).
+193. [Vis] Badge component (New, Sale, Limited).
+194. [Vis] Avatar component with border.
+195. [Vis] Divider with decorative elements.
+196. [Vis] Loader spinner (not boring circles).
+197. [Vis] Skeleton loader with gradient shimmer.
+198. [Vis] Video Player custom controls.
+199. [Vis] Audio Player custom controls.
+200. [Vis] Overall page screenshots for regression.
 
 ---
 
@@ -443,10 +318,10 @@ src/
 │   ├── api/               # API routes
 │   └── layout.tsx
 ├── components/
-│   ├── ui/                # Base components
-│   ├── product/           # Product-specific
-│   ├── character/         # Character-specific
-│   └── layout/            # Header, Footer, etc.
+│   ├── ui/                # Base components (Button, Card, Input, etc.)
+│   ├── product/           # Product-specific components
+│   ├── character/         # Character-specific components
+│   └── layout/            # Header, Footer, Navigation
 ├── lib/
 │   ├── db/                # Drizzle schema & queries
 │   ├── stripe/            # Payment integration
@@ -454,37 +329,77 @@ src/
 ├── styles/
 │   └── globals.css        # Tailwind + custom CSS
 └── tests/
-    ├── unit/              # Vitest
-    ├── e2e/               # Playwright
-    └── visual/            # Visual regression
+    ├── unit/              # Vitest unit tests
+    ├── e2e/               # Playwright E2E tests
+    └── visual/            # Visual regression tests
 ```
 
 ### Priorities
-1. **Phase 1**: Layout, navigation, character system, product display
-2. **Phase 2**: Cart, checkout, payments
-3. **Phase 3**: User accounts, search, filters
-4. **Phase 4**: Performance optimization, accessibility audit
+1. **Phase 1**: Layout, navigation, character system, product display (Suites 1, 2, 3)
+2. **Phase 2**: Cart, checkout, payments (Suite 4)
+3. **Phase 3**: User accounts, search, filters (Suite 5)
+4. **Phase 4**: Performance optimization, accessibility audit (Suites 6, 7)
 
 ### Commands
 ```bash
 pnpm dev          # Development server
 pnpm build        # Production build
-pnpm test         # Run Vitest
-pnpm test:e2e     # Run Playwright
+pnpm test         # Run Vitest unit tests
+pnpm test:e2e     # Run Playwright E2E tests
+pnpm test:visual  # Run visual regression tests
 pnpm lint         # ESLint
 pnpm db:push      # Push schema to D1
+pnpm db:studio    # Open Drizzle Studio
+```
+
+### Design Tokens
+```typescript
+// tailwind.config.ts
+const config = {
+  theme: {
+    extend: {
+      colors: {
+        kawaii: {
+          pink: '#FFB6C1',
+          cream: '#FFF8E7',
+          mint: '#98D8C8',
+          lavender: '#E6E6FA',
+          peach: '#FFDAB9',
+          sky: '#87CEEB',
+        }
+      },
+      borderRadius: {
+        'kawaii': '1.5rem',
+        'kawaii-lg': '2rem',
+      },
+      fontFamily: {
+        sans: ['Noto Sans JP', 'Kosugi Maru', 'sans-serif'],
+      },
+      boxShadow: {
+        'kawaii': '0 4px 14px 0 rgba(255, 182, 193, 0.39)',
+        'kawaii-hover': '0 6px 20px rgba(255, 182, 193, 0.5)',
+      },
+      animation: {
+        'bounce-soft': 'bounce-soft 0.5s ease-in-out',
+        'wiggle': 'wiggle 0.3s ease-in-out',
+        'float': 'float 3s ease-in-out infinite',
+      }
+    }
+  }
+}
 ```
 
 ---
 
 ## Notes for AI Agent
 
-1. **Study the reference sites** - Really understand the Japanese kawaii e-commerce aesthetic before building.
+1. **Study the reference sites** - Really understand the Japanese kawaii e-commerce aesthetic before building. The "vibe" is critical.
 2. **TDD approach** - Write tests first or alongside components.
-3. **Mobile-first** - Design for mobile, enhance for desktop.
+3. **Mobile-first** - Design for mobile, enhance for desktop. Most customers browse on phones.
 4. **Performance budget** - Keep it fast, Cloudflare free tier has limits.
-5. **Accessibility** - Kawaii doesn't mean inaccessible.
+5. **Accessibility** - Kawaii doesn't mean inaccessible. Keep WCAG AA compliance.
 6. **Commit frequently** - Small, logical commits with clear messages.
-7. **Ask questions** - If requirements are unclear, ask before assuming.
+7. **Australian localization** - AUD currency, Australian postal codes, AU shipping options.
+8. **Character system is KEY** - This is what differentiates from generic e-commerce.
 
-Let's build something delightfully kawaii! 🎀
+Let's build something delightfully kawaii! 🎀✨
