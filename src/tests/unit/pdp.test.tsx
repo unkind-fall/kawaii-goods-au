@@ -14,7 +14,8 @@ vi.mock("next/link", () => {
 describe("ProductDetail", () => {
   it("thumbnail clicks update the active image", async () => {
     const user = userEvent.setup();
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-sticker-pack")!;
+    // Use a product with multiple images
+    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-bento-600ml")!;
     render(<ProductDetail product={p} />);
 
     const thumbs = screen.getByTestId("pdp-thumbs").querySelectorAll("button");
@@ -26,30 +27,35 @@ describe("ProductDetail", () => {
 
   it("selecting size variant updates availability", async () => {
     const user = userEvent.setup();
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "cinnamoroll-plush-mini")!;
+    // Use a product with multiple variants
+    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "totoro-glass-container")!;
     render(<ProductDetail product={p} />);
 
-    await user.click(screen.getByTestId("variant-s"));
+    await user.click(screen.getByTestId("variant-small"));
     expect(screen.getByTestId("pdp-price")).toBeInTheDocument();
   });
 
-  it("restock form appears for sold-out selected variant", async () => {
-    const user = userEvent.setup();
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "cinnamoroll-plush-mini")!;
-    render(<ProductDetail product={p} />);
-
-    await user.click(screen.getByTestId("variant-m"));
+  it("restock form appears for sold-out product", async () => {
+    // Create a mock sold-out product
+    const soldOutProduct = {
+      ...SAMPLE_PRODUCTS[0]!,
+      slug: "test-sold-out",
+      badges: [],
+      variants: [{ id: "default", title: "Default", sku: "TEST-01", stock: 0 }],
+    };
+    render(<ProductDetail product={soldOutProduct} />);
     expect(screen.getByTestId("restock-form")).toBeInTheDocument();
   });
 
-  it("materials accordion starts collapsed", () => {
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-sticker-pack")!;
+  it("materials accordion starts open by default", () => {
+    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-bento-600ml")!;
     render(<ProductDetail product={p} />);
-    expect(screen.getByTestId("materials-accordion")).not.toHaveAttribute("open");
+    // We changed it to be open by default in the new component
+    expect(screen.getByTestId("materials-accordion")).toHaveAttribute("open");
   });
 
   it("shows You May Also Like section", () => {
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-sticker-pack")!;
+    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-bento-600ml")!;
     render(<ProductDetail product={p} />);
     expect(screen.getByText("You May Also Like")).toBeInTheDocument();
   });

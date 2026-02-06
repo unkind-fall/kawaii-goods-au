@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { SAMPLE_PRODUCTS } from "@/lib/data/sample";
+import { SAMPLE_PRODUCTS, type ProductCategory } from "@/lib/data/sample";
 import { queryProducts } from "@/lib/products/query";
 
 export const runtime = "edge";
@@ -8,11 +8,13 @@ export const runtime = "edge";
 export async function GET(req: Request) {
   const url = new URL(req.url);
 
-  const category = (url.searchParams.get("category") ?? "all") as "all" | "stationery" | "plush" | "accessories";
+  const rawCategory = url.searchParams.get("category") ?? "all";
+  const category = rawCategory as "all" | ProductCategory;
   const character = url.searchParams.get("character");
   const min = Number(url.searchParams.get("min") ?? "0");
   const max = Number(url.searchParams.get("max") ?? String(Number.MAX_SAFE_INTEGER));
-  const sort = (url.searchParams.get("sort") ?? "newest") as "newest" | "price_asc";
+  const rawSort = url.searchParams.get("sort") ?? "newest";
+  const sort = rawSort as "newest" | "price_asc" | "price_desc" | "popular";
   const page = Number(url.searchParams.get("page") ?? "1");
   const pageSize = Number(url.searchParams.get("pageSize") ?? "12");
   const q = url.searchParams.get("q") ?? "";

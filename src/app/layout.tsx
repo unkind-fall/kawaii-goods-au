@@ -41,7 +41,7 @@ export default function RootLayout({
           <Suspense>
             <Header />
           </Suspense>
-          <main className="mx-auto min-h-dvh max-w-6xl px-4 pb-28 pt-6 sm:pb-0">
+          <main className="mx-auto min-h-dvh max-w-6xl overflow-x-hidden px-4 pb-28 pt-4 sm:pt-6 sm:pb-8">
             <Suspense>
               <PageTransition>{children}</PageTransition>
             </Suspense>

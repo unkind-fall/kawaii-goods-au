@@ -1,13 +1,13 @@
-import type { Product } from "@/lib/data/sample";
+import type { Product, ProductCategory } from "@/lib/data/sample";
 import { applySynonyms, normalizeQuery } from "@/lib/search/logic";
 
 export type ProductQuery = {
   q?: string;
-  category?: "all" | "stationery" | "plush" | "accessories";
+  category?: "all" | ProductCategory;
   character?: string | null;
   min?: number;
   max?: number;
-  sort?: "newest" | "price_asc";
+  sort?: "newest" | "price_asc" | "price_desc" | "popular";
   page?: number;
   pageSize?: number;
 };
@@ -35,19 +35,48 @@ export function queryProducts(all: Product[], q: ProductQuery): ProductQueryResu
 
   let items = all.slice();
 
-  if (category !== "all") items = items.filter((p) => p.category === category);
-  if (character) items = items.filter((p) => p.characterTags.includes(character));
+  // Filter by category
+  if (category !== "all") {
+    items = items.filter((p) => p.category === category);
+  }
+
+  // Filter by character
+  if (character) {
+    items = items.filter((p) => p.characterTags.includes(character));
+  }
+
+  // Filter by price range
   items = items.filter((p) => p.priceCents >= min && p.priceCents <= max);
 
+  // Text search
   if (normalizedQuery) {
     items = items.filter((p) => {
-      const hay = `${p.name} ${p.slug} ${p.characterTags.join(" ")}`.toLowerCase();
+      const hay = `${p.name} ${p.nameJp ?? ""} ${p.slug} ${p.description} ${p.characterTags.join(" ")}`.toLowerCase();
       return hay.includes(normalizedQuery);
     });
   }
 
-  if (sort === "newest") items.sort((a, b) => b.createdAtMs - a.createdAtMs);
-  if (sort === "price_asc") items.sort((a, b) => a.priceCents - b.priceCents);
+  // Sorting
+  switch (sort) {
+    case "newest":
+      items.sort((a, b) => b.createdAtMs - a.createdAtMs);
+      break;
+    case "price_asc":
+      items.sort((a, b) => a.priceCents - b.priceCents);
+      break;
+    case "price_desc":
+      items.sort((a, b) => b.priceCents - a.priceCents);
+      break;
+    case "popular":
+      // Sort by badge (popular first) then by date
+      items.sort((a, b) => {
+        const aPopular = a.badges.includes("popular") ? 1 : 0;
+        const bPopular = b.badges.includes("popular") ? 1 : 0;
+        if (bPopular !== aPopular) return bPopular - aPopular;
+        return b.createdAtMs - a.createdAtMs;
+      });
+      break;
+  }
 
   const total = items.length;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -63,4 +92,3 @@ export function queryProducts(all: Product[], q: ProductQuery): ProductQueryResu
     normalizedQuery,
   };
 }
-
