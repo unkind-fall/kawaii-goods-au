@@ -9,10 +9,10 @@ import { formatAud } from "@/lib/utils/format";
 import { FloatingHearts, SparkleEffect } from "@/components/ui/DecorativeElements";
 
 const FEATURED = [
-  { title: "Sanrio Stationery", desc: "Pens, stickers, and notebooks.", href: "/products?category=stationery" },
-  { title: "Character Plush", desc: "Soft friends for your desk.", href: "/products?category=plush" },
-  { title: "Tiny Accessories", desc: "Keychains, pouches, charms.", href: "/products?category=accessories" },
-  { title: "New Arrivals", desc: "Fresh drops every week.", href: "/new" },
+  { title: "Sanrio Stationery", desc: "Pens, stickers, and notebooks.", href: "/products?category=stationery", color: "bg-kawaii-pink/25" },
+  { title: "Character Plush", desc: "Soft friends for your desk.", href: "/products?category=plush", color: "bg-kawaii-sky/25" },
+  { title: "Tiny Accessories", desc: "Keychains, pouches, charms.", href: "/products?category=accessories", color: "bg-kawaii-lavender/30" },
+  { title: "New Arrivals", desc: "Fresh drops every week.", href: "/new", color: "bg-kawaii-mint/25" },
 ];
 
 const featuredCharacters = SAMPLE_CHARACTERS.filter((c) => c.type === "main").slice(0, 6);
@@ -33,23 +33,23 @@ export default function HomePage() {
   return (
     <div className="grid gap-10">
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-kawaii-lg bg-white/70 p-8 shadow-kawaii ring-1 ring-kawaii-pink/30">
+      <section className="relative overflow-hidden rounded-kawaii-lg bg-gradient-to-br from-kawaii-pink/40 via-kawaii-peach/30 to-kawaii-sky/30 p-8 shadow-kawaii ring-1 ring-kawaii-pink/30">
         <FloatingHearts count={5} />
         <SparkleEffect count={4} />
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-kawaii-sky/30 blur-2xl"
+          className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-kawaii-sky/40 blur-2xl"
           animate={{ x: [0, 8, 0], y: [0, -6, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute -bottom-12 -left-12 h-44 w-44 rounded-full bg-kawaii-pink/30 blur-2xl"
+          className="pointer-events-none absolute -bottom-12 -left-12 h-44 w-44 rounded-full bg-kawaii-pink/40 blur-2xl"
           animate={{ x: [0, -6, 0], y: [0, 8, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         />
         <div className="relative z-10">
-          <p className="inline-flex rounded-kawaii bg-kawaii-lavender/40 px-4 py-2 text-xs font-semibold text-foreground/75">
+          <p className="inline-flex rounded-kawaii bg-white/70 px-4 py-2 text-xs font-semibold text-foreground/75">
             AU shipping, JP vibes
           </p>
           <h1 className="mt-4 text-balance text-3xl font-semibold sm:text-4xl">
@@ -88,7 +88,7 @@ export default function HomePage() {
           <motion.div key={c.href} variants={fadeUp}>
             <Link
               href={c.href}
-              className="group block rounded-kawaii-lg bg-white/70 p-6 shadow-sm ring-1 ring-kawaii-pink/30 transition hover:-translate-y-0.5 hover:shadow-kawaii-hover"
+              className={`group block rounded-kawaii-lg p-6 shadow-sm ring-1 ring-kawaii-pink/30 transition hover:-translate-y-0.5 hover:shadow-kawaii-hover ${c.color}`}
             >
               <p className="text-base font-semibold">{c.title}</p>
               <p className="mt-1 text-sm text-foreground/70">{c.desc}</p>
@@ -117,7 +117,8 @@ export default function HomePage() {
                 className="group flex items-center gap-4 rounded-kawaii-lg bg-white/70 p-4 shadow-sm ring-1 ring-kawaii-pink/30 transition hover:-translate-y-0.5 hover:shadow-kawaii-hover"
               >
                 <div
-                  className="relative h-16 w-16 flex-none overflow-hidden rounded-full shadow-sm ring-2 ring-kawaii-pink/40"
+                  className="relative flex h-16 w-16 flex-none items-center justify-center overflow-hidden rounded-full shadow-sm ring-2 ring-kawaii-pink/40"
+                  style={{ backgroundColor: c.hexColor }}
                 >
                   <Image
                     src={c.heroImage}
@@ -125,8 +126,6 @@ export default function HomePage() {
                     fill
                     sizes="64px"
                     className="object-cover"
-                    placeholder="blur"
-                    blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
                   />
                 </div>
                 <div>
@@ -170,8 +169,6 @@ export default function HomePage() {
                       fill
                       sizes="(max-width: 640px) 50vw, 25vw"
                       className="object-cover transition group-hover:scale-[1.02]"
-                      placeholder="blur"
-                      blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
                     />
                   </div>
                   <p className="mt-3 text-sm font-semibold">{p.name}</p>
@@ -194,7 +191,8 @@ export default function HomePage() {
               className="flex flex-none flex-col items-center gap-2 transition hover:-translate-y-0.5"
             >
               <div
-                className="relative h-16 w-16 overflow-hidden rounded-full shadow-kawaii-sm ring-2 ring-kawaii-pink/40"
+                className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full shadow-kawaii-sm ring-2 ring-white/80"
+                style={{ backgroundColor: c.hexColor }}
               >
                 <Image
                   src={c.heroImage}
@@ -202,8 +200,6 @@ export default function HomePage() {
                   fill
                   sizes="64px"
                   className="object-cover"
-                  placeholder="blur"
-                  blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
                 />
               </div>
               <span className="text-xs font-semibold text-foreground/70">{c.name}</span>

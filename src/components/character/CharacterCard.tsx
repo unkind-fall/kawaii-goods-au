@@ -19,15 +19,16 @@ export function CharacterCard({ character, index = 0 }: { character: Character; 
         data-testid={`character-card-${character.slug}`}
         className="group block overflow-hidden rounded-kawaii-lg bg-white/70 shadow-sm ring-1 ring-kawaii-pink/30 transition hover:shadow-kawaii-hover"
       >
-        <div className="relative aspect-[4/3] overflow-hidden bg-kawaii-cream">
+        <div
+          className="relative aspect-[4/3] overflow-hidden"
+          style={{ backgroundColor: character.hexColor }}
+        >
           <Image
             src={character.heroImage}
             alt={`${character.name} hero`}
             fill
             sizes="(max-width: 640px) 50vw, 25vw"
             className="object-cover transition group-hover:scale-[1.02]"
-            placeholder="blur"
-            blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
         </div>
