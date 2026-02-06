@@ -41,7 +41,7 @@ export const SAMPLE_CHARACTERS: Character[] = [
     birthday: "11/01",
     interests: ["Baking", "Friends", "Piano"],
     bio: "Hello Kitty is kind, cheerful, and always ready to share a sweet treat.",
-    heroImage: "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1200&q=60",
+    heroImage: "https://picsum.photos/seed/hello-kitty/1200/900",
     friends: ["my-melody", "kuromi", "cinnamoroll"],
   },
   {
@@ -52,7 +52,7 @@ export const SAMPLE_CHARACTERS: Character[] = [
     birthday: "03/06",
     interests: ["Cafe naps", "Flying", "Hot cocoa"],
     bio: "A fluffy pup with long ears who drifts gently through the sky.",
-    heroImage: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60",
+    heroImage: "https://picsum.photos/seed/cinnamoroll/1200/900",
     friends: ["hello-kitty", "pompompurin"],
   },
   {
@@ -63,7 +63,7 @@ export const SAMPLE_CHARACTERS: Character[] = [
     birthday: "10/31",
     interests: ["Diaries", "Pranks", "Cute chaos"],
     bio: "Mischievous, stylish, and secretly soft on the inside.",
-    heroImage: "https://images.unsplash.com/photo-1520975680904-4dd3b2c236d6?auto=format&fit=crop&w=1200&q=60",
+    heroImage: "https://picsum.photos/seed/kuromi/1200/900",
     friends: ["my-melody", "hello-kitty"],
   },
   {
@@ -74,7 +74,7 @@ export const SAMPLE_CHARACTERS: Character[] = [
     birthday: "01/18",
     interests: ["Baking", "Picnics", "Handmade crafts"],
     bio: "Gentle and thoughtful, with a cozy heart and a very cute hood.",
-    heroImage: "https://images.unsplash.com/photo-1517926112623-f32a800790d4?auto=format&fit=crop&w=1200&q=60",
+    heroImage: "https://picsum.photos/seed/my-melody/1200/900",
     friends: ["hello-kitty", "kuromi"],
   },
   {
@@ -85,7 +85,7 @@ export const SAMPLE_CHARACTERS: Character[] = [
     birthday: "04/16",
     interests: ["Pudding", "Nap time", "Collecting shoes"],
     bio: "A golden retriever who loves pudding and comfy days.",
-    heroImage: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=1200&q=60",
+    heroImage: "https://picsum.photos/seed/pompompurin/1200/900",
     friends: ["cinnamoroll"],
   },
   // generate a bunch of sub-characters for paging
@@ -97,7 +97,7 @@ export const SAMPLE_CHARACTERS: Character[] = [
       type: "sub" as const,
       hexColor: n % 2 ? "#98D8C8" : "#E6E6FA",
       bio: "A tiny side character with a big pastel personality.",
-      heroImage: "https://images.unsplash.com/photo-1520975680904-4dd3b2c236d6?auto=format&fit=crop&w=1200&q=60",
+      heroImage: `https://picsum.photos/seed/friend-${n}/1200/900`,
       friends: [],
     };
   }),
@@ -118,8 +118,8 @@ export const SAMPLE_PRODUCTS: Product[] = [
     category: "stationery",
     characterTags: ["hello-kitty"],
     images: [
-      { url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=60", alt: "Sticker pack front" },
-      { url: "https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?auto=format&fit=crop&w=1200&q=60", alt: "Sticker pack close-up" },
+      { url: "https://picsum.photos/seed/hk-sticker-1/1200/1200", alt: "Sticker pack front" },
+      { url: "https://picsum.photos/seed/hk-sticker-2/1200/1200", alt: "Sticker pack close-up" },
     ],
     variants: [
       { id: "default", title: "Default", sku: "HK-STICKERS-01", stock: 25 },
@@ -138,8 +138,8 @@ export const SAMPLE_PRODUCTS: Product[] = [
     category: "plush",
     characterTags: ["cinnamoroll"],
     images: [
-      { url: "https://images.unsplash.com/photo-1615486364462-ef6363ad7b1d?auto=format&fit=crop&w=1200&q=60", alt: "Plush front" },
-      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60", alt: "Plush side" },
+      { url: "https://picsum.photos/seed/cin-plush-1/1200/1200", alt: "Plush front" },
+      { url: "https://picsum.photos/seed/cin-plush-2/1200/1200", alt: "Plush side" },
     ],
     variants: [
       { id: "s", title: "Small", sku: "CIN-PLUSH-S", stock: 3 },
@@ -159,8 +159,8 @@ export const SAMPLE_PRODUCTS: Product[] = [
     category: "accessories",
     characterTags: ["kuromi"],
     images: [
-      { url: "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1200&q=60", alt: "Keychain front" },
-      { url: "https://images.unsplash.com/photo-1517926112623-f32a800790d4?auto=format&fit=crop&w=1200&q=60", alt: "Keychain detail" },
+      { url: "https://picsum.photos/seed/krm-key-1/1200/1200", alt: "Keychain front" },
+      { url: "https://picsum.photos/seed/krm-key-2/1200/1200", alt: "Keychain detail" },
     ],
     variants: [{ id: "default", title: "Default", sku: "KRM-KEY-01", stock: 0 }],
   },
@@ -179,8 +179,8 @@ export const SAMPLE_PRODUCTS: Product[] = [
       category,
       characterTags: tags,
       images: [
-        { url: "https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?auto=format&fit=crop&w=1200&q=60", alt: "Item image 1" },
-        { url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=60", alt: "Item image 2" },
+        { url: `https://picsum.photos/seed/item-${n}-1/1200/1200`, alt: "Item image 1" },
+        { url: `https://picsum.photos/seed/item-${n}-2/1200/1200`, alt: "Item image 2" },
       ],
       variants: [{ id: "default", title: "Default", sku: `ITEM-${n}`, stock: n % 10 === 0 ? 0 : 10 }],
     } satisfies Product;
@@ -195,4 +195,3 @@ export const SEARCH_SYNONYMS: Record<string, string> = {
   cinna: "cinnamoroll",
   pudding: "pompompurin",
 };
-
