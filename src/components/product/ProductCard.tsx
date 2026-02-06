@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 
 import type { Product } from "@/lib/data/sample";
 import { formatAud } from "@/lib/utils/format";
+import { useCart } from "@/lib/cart/store";
 
 export function ProductCard({
   product,
@@ -16,6 +17,7 @@ export function ProductCard({
   onQuickAdd?: (slug: string) => void;
 }) {
   const [hover, setHover] = useState(false);
+  const cart = useCart();
 
   const soldOut = product.badges.includes("sold_out") || product.variants.every((v) => v.stock <= 0);
   const isNew = product.badges.includes("new");
@@ -45,6 +47,8 @@ export function ProductCard({
               alt={img.alt}
               fill
               sizes="(max-width: 640px) 50vw, 25vw"
+              data-testid="product-image"
+              data-src={img.url}
               className={[
                 "object-cover transition",
                 soldOut ? "grayscale opacity-60" : "group-hover:scale-[1.02]",
@@ -88,7 +92,20 @@ export function ProductCard({
               className="min-h-11 flex-1 rounded-kawaii bg-kawaii-pink px-4 text-xs font-semibold shadow-sm transition hover:shadow-kawaii-hover disabled:opacity-60"
               onClick={(e) => {
                 e.preventDefault();
-                onQuickAdd?.(product.slug);
+                if (onQuickAdd) onQuickAdd(product.slug);
+                else {
+                  const v = product.variants[0]!;
+                  cart.addItem({
+                    productSlug: product.slug,
+                    variantId: v.id,
+                    name: product.name,
+                    priceCents: v.priceCents ?? product.priceCents,
+                    qty: 1,
+                    sku: v.sku,
+                    imageUrl: product.images[0]?.url,
+                    maxPerCustomer: product.maxPerCustomer,
+                  });
+                }
               }}
               disabled={soldOut}
             >
@@ -121,4 +138,3 @@ function Badge({ kind }: { kind: "new" | "sale" | "sold_out" }) {
     </span>
   );
 }
-

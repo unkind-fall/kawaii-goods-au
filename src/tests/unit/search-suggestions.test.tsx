@@ -12,6 +12,12 @@ vi.mock("next/navigation", () => {
   };
 });
 
+vi.mock("@/lib/cart/store", () => {
+  return {
+    useCart: () => ({ count: 0 }),
+  };
+});
+
 describe("Search suggestions", () => {
   it("suggests top 5 trending terms on focus", async () => {
     render(<Header />);
@@ -26,4 +32,3 @@ describe("Search suggestions", () => {
     }
   });
 });
-

@@ -4,6 +4,13 @@ import { describe, expect, it, vi } from "vitest";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SAMPLE_PRODUCTS } from "@/lib/data/sample";
 
+import { vi } from "vitest";
+vi.mock("@/lib/cart/store", () => {
+  return {
+    useCart: () => ({ addItem: vi.fn(), count: 0 }),
+  };
+});
+
 describe("ProductCard", () => {
   it("shows image, name, price, New badge, fav button", () => {
     const product = SAMPLE_PRODUCTS.find((p) => p.slug === "hello-kitty-sticker-pack")!;
@@ -32,4 +39,3 @@ describe("ProductCard", () => {
     expect(onQuickAdd).toHaveBeenCalledWith(product.slug);
   });
 });
-
