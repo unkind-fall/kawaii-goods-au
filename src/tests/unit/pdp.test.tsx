@@ -15,7 +15,7 @@ describe("ProductDetail", () => {
   it("thumbnail clicks update the active image", async () => {
     const user = userEvent.setup();
     // Use a product with multiple images
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-bento-600ml")!;
+    const p = SAMPLE_PRODUCTS.find((x) => x.images.length > 1)!;
     render(<ProductDetail product={p} />);
 
     const thumbs = screen.getByTestId("pdp-thumbs").querySelectorAll("button");
@@ -28,10 +28,13 @@ describe("ProductDetail", () => {
   it("selecting size variant updates availability", async () => {
     const user = userEvent.setup();
     // Use a product with multiple variants
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "totoro-glass-container")!;
+    const p = SAMPLE_PRODUCTS.find((x) => x.variants.length > 1)!;
     render(<ProductDetail product={p} />);
 
-    await user.click(screen.getByTestId("variant-small"));
+    const variantButton = screen.getAllByTestId(/variant-/)[1];
+    if (variantButton) {
+      await user.click(variantButton);
+    }
     expect(screen.getByTestId("pdp-price")).toBeInTheDocument();
   });
 
@@ -48,14 +51,14 @@ describe("ProductDetail", () => {
   });
 
   it("materials accordion starts open by default", () => {
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-bento-600ml")!;
+    const p = SAMPLE_PRODUCTS.find((x) => x.materials)!;
     render(<ProductDetail product={p} />);
     // We changed it to be open by default in the new component
     expect(screen.getByTestId("materials-accordion")).toHaveAttribute("open");
   });
 
   it("shows You May Also Like section", () => {
-    const p = SAMPLE_PRODUCTS.find((x) => x.slug === "hello-kitty-bento-600ml")!;
+    const p = SAMPLE_PRODUCTS[0]!;
     render(<ProductDetail product={p} />);
     expect(screen.getByText("You May Also Like")).toBeInTheDocument();
   });

@@ -7,7 +7,7 @@ import { SAMPLE_PRODUCTS } from "@/lib/data/sample";
 describe("ProductCard", () => {
   it("shows image, name, price, NEW badge, fav button", () => {
     // Use a product with "new" badge
-    const product = SAMPLE_PRODUCTS.find((p) => p.slug === "kuromi-bento-600ml")!;
+    const product = SAMPLE_PRODUCTS.find((p) => p.badges.includes("new"))!;
     render(<ProductCard product={product} />);
 
     expect(screen.getByRole("link", { name: product.name })).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("ProductCard", () => {
   });
 
   it("View Details link points to product page (hidden on mobile)", () => {
-    const product = SAMPLE_PRODUCTS.find((p) => p.slug === "hello-kitty-bento-600ml")!;
+    const product = SAMPLE_PRODUCTS[0]!;
     render(<ProductCard product={product} />);
 
     const link = screen.getByTestId("product-view-details");

@@ -12,6 +12,8 @@ const nextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "placehold.co" },
+      { protocol: "https", hostname: "makeshop-multi-images.akamaized.net" },
+      { protocol: "https", hostname: "gigaplus.makeshop.jp" },
     ],
   },
 };
