@@ -11,7 +11,7 @@ vi.stubGlobal("navigator", {
 
 describe("CharacterShrine", () => {
   it("renders Birthday and Interests when present", () => {
-    const c = SAMPLE_CHARACTERS.find((x) => x.slug === "hello-kitty")!;
+    const c = SAMPLE_CHARACTERS.find((x) => x.slug === "kuromi")!;
     render(<CharacterShrine character={c} />);
 
     expect(screen.getByTestId("character-birthday")).toBeInTheDocument();
@@ -19,16 +19,16 @@ describe("CharacterShrine", () => {
   });
 
   it("shows breadcrumbs Home > Characters > Name", () => {
-    const c = SAMPLE_CHARACTERS.find((x) => x.slug === "hello-kitty")!;
+    const c = SAMPLE_CHARACTERS.find((x) => x.slug === "kuromi")!;
     render(<CharacterShrine character={c} />);
     expect(screen.getByTestId("breadcrumbs")).toHaveTextContent("Home");
     expect(screen.getByTestId("breadcrumbs")).toHaveTextContent("Characters");
-    expect(screen.getByTestId("breadcrumbs")).toHaveTextContent("Hello Kitty");
+    expect(screen.getByTestId("breadcrumbs")).toHaveTextContent("Kuromi");
   });
 
   it("truncates bio and expands with Read More without page reload", async () => {
     const user = userEvent.setup();
-    const c = { ...SAMPLE_CHARACTERS.find((x) => x.slug === "hello-kitty")!, bio: "a ".repeat(200) };
+    const c = { ...SAMPLE_CHARACTERS.find((x) => x.slug === "kuromi")!, bio: "a ".repeat(200) };
     render(<CharacterShrine character={c} />);
 
     expect(screen.getByTestId("character-bio").className).toContain("line-clamp-3");
@@ -37,7 +37,7 @@ describe("CharacterShrine", () => {
   });
 
   it("renders Next/Prev navigation links", () => {
-    const c = SAMPLE_CHARACTERS.find((x) => x.slug === "hello-kitty")!;
+    const c = SAMPLE_CHARACTERS.find((x) => x.slug === "kuromi")!;
     render(<CharacterShrine character={c} />);
     expect(screen.getByTestId("character-prev")).toBeInTheDocument();
     expect(screen.getByTestId("character-next")).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("CharacterShrine", () => {
 
   it("optimistically updates Like count and persists to localStorage", async () => {
     const user = userEvent.setup();
-    const c = SAMPLE_CHARACTERS.find((x) => x.slug === "hello-kitty")!;
+    const c = SAMPLE_CHARACTERS.find((x) => x.slug === "kuromi")!;
 
     render(<CharacterShrine character={c} />);
     const btn = screen.getByTestId("character-like");

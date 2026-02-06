@@ -14,6 +14,7 @@ const nextConfig = {
       { protocol: "https", hostname: "placehold.co" },
       { protocol: "https", hostname: "makeshop-multi-images.akamaized.net" },
       { protocol: "https", hostname: "gigaplus.makeshop.jp" },
+      { protocol: "https", hostname: "cdn.shopify.com" },
     ],
   },
 };
