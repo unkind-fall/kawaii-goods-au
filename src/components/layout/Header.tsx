@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { TRENDING_SEARCH_TERMS } from "@/lib/data/sample";
 import { applySynonyms } from "@/lib/search/logic";
+import { useFavorites } from "@/lib/favorites/store";
 
 type NavItem = { label: string; href: string };
 
@@ -33,11 +34,18 @@ function useScrollShadow(thresholdPx: number) {
 
 export function Header() {
   const hasShadow = useScrollShadow(50);
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const closeTimeoutRef = useRef<number | null>(null);
 
   const charactersNav = useMemo(() => NAV.find((n) => n.label === "Characters")!, []);
+  const { count: favCount } = useFavorites();
+
+  function isActive(href: string) {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  }
 
   return (
     <header
@@ -67,7 +75,12 @@ export function Header() {
             className="col-start-2 justify-self-center text-center text-lg font-semibold tracking-tight sm:col-start-1 sm:justify-self-start sm:text-left"
           >
             <span className="inline-flex items-center gap-2">
-              <span aria-hidden className="inline-block h-7 w-7 rounded-full bg-kawaii-pink shadow-sm" />
+              <span
+                aria-hidden
+                className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-kawaii-pink to-kawaii-peach shadow-sm text-xs"
+              >
+                &#10022;
+              </span>
               <span className="text-balance">Kawaii Goods AU</span>
             </span>
           </Link>
@@ -77,11 +90,17 @@ export function Header() {
               <Search testId="desktop-search" />
             </div>
             <Link
-              href="/cart"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-kawaii bg-white/80 shadow-sm ring-1 ring-kawaii-pink/30"
-              aria-label="Cart"
+              href="/products"
+              className="relative inline-flex h-11 w-11 items-center justify-center rounded-kawaii bg-white/80 shadow-sm ring-1 ring-kawaii-pink/30 transition hover:shadow-kawaii-hover"
+              aria-label="Favorites"
+              data-testid="header-favorites"
             >
-              <span aria-hidden>🛒</span>
+              <span aria-hidden>&#9825;</span>
+              {favCount > 0 ? (
+                <span className="absolute -right-1 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-kawaii-pink text-[10px] font-bold shadow-sm">
+                  {favCount > 9 ? "9+" : favCount}
+                </span>
+              ) : null}
             </Link>
           </div>
         </div>
@@ -89,16 +108,27 @@ export function Header() {
         <nav className="hidden sm:block">
           <ul className="flex items-center gap-1 pb-3">
             {NAV.map((item) => {
+              const active = isActive(item.href);
               const isCharacters = item.label === "Characters";
               if (!isCharacters) {
                 return (
-                  <li key={item.href}>
+                  <li key={item.href} className="relative">
                     <Link
                       href={item.href}
-                      className="inline-flex min-h-11 items-center rounded-kawaii px-4 text-sm font-medium transition hover:bg-white/70 hover:shadow-kawaii-hover"
+                      className={[
+                        "inline-flex min-h-11 items-center rounded-kawaii px-4 text-sm font-medium transition hover:bg-white/70 hover:shadow-kawaii-hover",
+                        active ? "text-foreground" : "text-foreground/70",
+                      ].join(" ")}
                     >
                       {item.label}
                     </Link>
+                    {active ? (
+                      <motion.div
+                        layoutId="nav-underline"
+                        className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-kawaii-pink"
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                      />
+                    ) : null}
                   </li>
                 );
               }
@@ -116,10 +146,20 @@ export function Header() {
                 >
                   <Link
                     href={charactersNav.href}
-                    className="inline-flex min-h-11 items-center rounded-kawaii bg-white/40 px-4 text-sm font-medium transition hover:bg-white/70 hover:shadow-kawaii-hover"
+                    className={[
+                      "inline-flex min-h-11 items-center rounded-kawaii bg-white/40 px-4 text-sm font-medium transition hover:bg-white/70 hover:shadow-kawaii-hover",
+                      active ? "text-foreground" : "text-foreground/70",
+                    ].join(" ")}
                   >
                     Characters
                   </Link>
+                  {active ? (
+                    <motion.div
+                      layoutId="nav-underline"
+                      className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-kawaii-pink"
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    />
+                  ) : null}
                   <AnimatePresence>
                     {megaOpen ? <MegaMenu key="mega" /> : null}
                   </AnimatePresence>
@@ -150,7 +190,10 @@ export function Header() {
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        className="inline-flex min-h-11 w-full items-center rounded-kawaii px-4 text-sm font-medium transition hover:bg-kawaii-cream"
+                        className={[
+                          "inline-flex min-h-11 w-full items-center rounded-kawaii px-4 text-sm font-medium transition hover:bg-kawaii-cream",
+                          isActive(item.href) ? "bg-kawaii-pink/20 font-semibold" : "",
+                        ].join(" ")}
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.label}
@@ -181,13 +224,13 @@ function MegaMenu() {
         <div className="rounded-kawaii bg-kawaii-lavender/40 p-4">
           <p className="text-sm font-semibold">Featured</p>
           <div className="mt-3 grid gap-2 text-sm">
-            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/characters/hello-kitty">
+            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/character/hello-kitty">
               Hello Kitty
             </Link>
-            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/characters/cinnamoroll">
+            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/character/cinnamoroll">
               Cinnamoroll
             </Link>
-            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/characters/kuromi">
+            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/character/kuromi">
               Kuromi
             </Link>
           </div>
@@ -198,11 +241,11 @@ function MegaMenu() {
             <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/characters">
               All characters
             </Link>
-            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/products?tag=sanrio">
-              Sanrio goods
-            </Link>
-            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/products?tag=stationery">
+            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/products?category=stationery">
               Stationery
+            </Link>
+            <Link className="rounded-kawaii px-3 py-2 hover:bg-white/70" href="/products?category=accessories">
+              Accessories
             </Link>
           </div>
         </div>
@@ -247,7 +290,6 @@ function Search({ testId }: { testId?: string }) {
     const normalized = applySynonyms(nextQ);
     const sp = new URLSearchParams(params.toString());
     sp.set("q", normalized);
-    // Keep any existing product filters in URL when searching.
     router.push(pathname === "/products" ? `/products?${sp.toString()}` : `/products?${sp.toString()}`);
 
     try {
@@ -271,7 +313,7 @@ function Search({ testId }: { testId?: string }) {
         ].join(" ")}
       >
         <span aria-hidden className="text-sm">
-          🔎
+          &#128270;
         </span>
         <input
           data-testid={testId}

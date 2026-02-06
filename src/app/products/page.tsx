@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { Product } from "@/lib/data/sample";
 import { SAMPLE_CHARACTERS } from "@/lib/data/sample";
 import { ProductCard } from "@/components/product/ProductCard";
-import { QuickAddDrawer } from "@/components/product/QuickAddDrawer";
 import { applySynonyms } from "@/lib/search/logic";
 
 type ApiResponse = {
@@ -30,8 +29,6 @@ export default function ProductsPage() {
 
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
-  const [drawerSlug, setDrawerSlug] = useState<string | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const params = useMemo(() => {
     return {
@@ -121,7 +118,7 @@ export default function ProductsPage() {
         <p className="mt-2 text-sm text-foreground/70">High-density grids, clear prices, and cute badges.</p>
       </div>
 
-      <section className="rounded-kawaii-lg bg-white/70 p-5 shadow-sm ring-1 ring-kawaii-pink/30">
+      <section className="rounded-kawaii-lg bg-white/70 p-5 shadow-kawaii-sm ring-1 ring-kawaii-pink/30">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <label className="text-xs font-semibold text-foreground/70" htmlFor="product-q">
@@ -246,15 +243,8 @@ export default function ProductsPage() {
 
       <section>
         <div data-testid="product-grid" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {(data?.items ?? []).map((p) => (
-            <ProductCard
-              key={p.slug}
-              product={p}
-              onQuickAdd={(slug) => {
-                setDrawerSlug(slug);
-                setDrawerOpen(true);
-              }}
-            />
+          {(data?.items ?? []).map((p, i) => (
+            <ProductCard key={p.slug} product={p} index={i} />
           ))}
         </div>
       </section>
@@ -271,7 +261,7 @@ export default function ProductsPage() {
                 type="button"
                 onClick={() => setPage(p)}
                 className={[
-                  "min-h-11 rounded-kawaii px-4 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30",
+                  "min-h-11 rounded-kawaii px-4 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30 transition",
                   active ? "bg-kawaii-pink" : "bg-white/80 hover:bg-white",
                 ].join(" ")}
               >
@@ -281,15 +271,6 @@ export default function ProductsPage() {
           })}
         </nav>
       ) : null}
-
-      <QuickAddDrawer
-        slug={drawerSlug}
-        open={drawerOpen}
-        onClose={() => {
-          setDrawerOpen(false);
-          setDrawerSlug(null);
-        }}
-      />
     </div>
   );
 }

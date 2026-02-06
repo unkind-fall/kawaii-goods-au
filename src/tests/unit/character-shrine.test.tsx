@@ -5,12 +5,6 @@ import { describe, expect, it, vi } from "vitest";
 import { CharacterShrine } from "@/components/character/CharacterShrine";
 import { SAMPLE_CHARACTERS } from "@/lib/data/sample";
 
-vi.mock("@/lib/cart/store", () => {
-  return {
-    useCart: () => ({ addItem: vi.fn(), count: 0 }),
-  };
-});
-
 vi.stubGlobal("navigator", {
   clipboard: { writeText: vi.fn(async () => undefined) },
 });

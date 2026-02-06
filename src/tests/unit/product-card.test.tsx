@@ -1,15 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { ProductCard } from "@/components/product/ProductCard";
 import { SAMPLE_PRODUCTS } from "@/lib/data/sample";
-
-import { vi } from "vitest";
-vi.mock("@/lib/cart/store", () => {
-  return {
-    useCart: () => ({ addItem: vi.fn(), count: 0 }),
-  };
-});
 
 describe("ProductCard", () => {
   it("shows image, name, price, New badge, fav button", () => {
@@ -23,19 +16,17 @@ describe("ProductCard", () => {
     expect(screen.getByTestId("product-fav")).toBeInTheDocument();
   });
 
-  it("sold out badge overlays and disables quick add", () => {
+  it("sold out badge overlays the card", () => {
     const product = SAMPLE_PRODUCTS.find((p) => p.slug === "kuromi-keychain")!;
     render(<ProductCard product={product} />);
     expect(screen.getByText("Sold Out")).toBeInTheDocument();
-    expect(screen.getByTestId("product-quick-add")).toBeDisabled();
   });
 
-  it("clicking Quick Add calls handler and does not navigate", () => {
+  it("View Details link points to product page", () => {
     const product = SAMPLE_PRODUCTS.find((p) => p.slug === "hello-kitty-sticker-pack")!;
-    const onQuickAdd = vi.fn();
-    render(<ProductCard product={product} onQuickAdd={onQuickAdd} />);
+    render(<ProductCard product={product} />);
 
-    fireEvent.click(screen.getByTestId("product-quick-add"));
-    expect(onQuickAdd).toHaveBeenCalledWith(product.slug);
+    const link = screen.getByTestId("product-view-details");
+    expect(link).toHaveAttribute("href", `/product/${product.slug}`);
   });
 });

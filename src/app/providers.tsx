@@ -1,13 +1,14 @@
 "use client";
 
-import { CartProvider } from "@/lib/cart/store";
-import { FlyingItemLayer } from "@/components/cart/FlyingItemLayer";
+import { FavoritesProvider } from "@/lib/favorites/store";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <CartProvider>
-      {children}
-      <FlyingItemLayer />
-    </CartProvider>
+    <FavoritesProvider>
+      <ToastProvider>
+        {children}
+      </ToastProvider>
+    </FavoritesProvider>
   );
 }

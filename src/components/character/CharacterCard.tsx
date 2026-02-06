@@ -6,9 +6,14 @@ import Link from "next/link";
 
 import type { Character } from "@/lib/data/sample";
 
-export function CharacterCard({ character }: { character: Character }) {
+export function CharacterCard({ character, index = 0 }: { character: Character; index?: number }) {
   return (
-    <motion.div whileHover={{ y: -8 }} transition={{ type: "spring", stiffness: 260, damping: 18 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 260, damping: 22, delay: index * 0.05 }}
+      whileHover={{ y: -8 }}
+    >
       <Link
         href={`/character/${character.slug}`}
         data-testid={`character-card-${character.slug}`}
@@ -24,8 +29,9 @@ export function CharacterCard({ character }: { character: Character }) {
             placeholder="blur"
             blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
           />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
         </div>
-        <div className="p-4">
+        <div className="p-4" style={{ borderBottom: `3px solid ${character.hexColor}` }}>
           <p className="text-sm font-semibold">{character.name}</p>
           <p className="mt-1 text-xs text-foreground/60">{character.type === "main" ? "Main" : "Sub-character"}</p>
         </div>
@@ -33,4 +39,3 @@ export function CharacterCard({ character }: { character: Character }) {
     </motion.div>
   );
 }
-

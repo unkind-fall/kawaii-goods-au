@@ -1,18 +1,16 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import type { Product } from "@/lib/data/sample";
-import { useCart } from "@/lib/cart/store";
+import { SAMPLE_CHARACTERS, SAMPLE_PRODUCTS } from "@/lib/data/sample";
 import { formatAud } from "@/lib/utils/format";
-import { estimateShippingLabel } from "@/lib/utils/shipping";
 import { ImageGallery } from "./ImageGallery";
 import { ProductCard } from "./ProductCard";
-import { SAMPLE_PRODUCTS } from "@/lib/data/sample";
 
 export function ProductDetail({ product }: { product: Product }) {
-  const cart = useCart();
   const [variantId, setVariantId] = useState<string | null>(product.variants.length === 1 ? product.variants[0]!.id : null);
 
   const variant = useMemo(() => product.variants.find((v) => v.id === variantId) ?? null, [product.variants, variantId]);
@@ -21,7 +19,15 @@ export function ProductDetail({ product }: { product: Product }) {
   const priceCents = variant?.priceCents ?? product.priceCents;
   const lowStock = variant ? variant.stock > 0 && variant.stock <= 3 : false;
 
-  const fbt = useMemo(() => SAMPLE_PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 2), [product.slug]);
+  const related = useMemo(() => SAMPLE_PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 4), [product.slug]);
+
+  const characterLinks = useMemo(
+    () =>
+      product.characterTags
+        .map((tag) => SAMPLE_CHARACTERS.find((c) => c.slug === tag))
+        .filter(Boolean) as { slug: string; name: string; hexColor: string }[],
+    [product.characterTags],
+  );
 
   return (
     <div className="grid gap-6">
@@ -29,17 +35,22 @@ export function ProductDetail({ product }: { product: Product }) {
         <Link className="hover:underline" href="/">
           Home
         </Link>{" "}
-        <span aria-hidden>›</span>{" "}
+        <span aria-hidden>&rsaquo;</span>{" "}
         <Link className="hover:underline" href="/products">
           Products
         </Link>{" "}
-        <span aria-hidden>›</span> <span className="font-semibold text-foreground/80">{product.name}</span>
+        <span aria-hidden>&rsaquo;</span> <span className="font-semibold text-foreground/80">{product.name}</span>
       </nav>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <ImageGallery images={product.images} />
 
-        <section className="rounded-kawaii-lg bg-white/70 p-8 shadow-kawaii ring-1 ring-kawaii-pink/30">
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 24, delay: 0.1 }}
+          className="rounded-kawaii-lg bg-white/70 p-8 shadow-kawaii ring-1 ring-kawaii-pink/30"
+        >
           <div className="flex items-start justify-between gap-4">
             <div>
               <h1 className="text-2xl font-semibold">{product.name}</h1>
@@ -70,9 +81,21 @@ export function ProductDetail({ product }: { product: Product }) {
             </p>
           ) : null}
 
-          <p data-testid="ship-estimate" className="mt-2 text-sm text-foreground/70">
-            {estimateShippingLabel()}
-          </p>
+          {characterLinks.length > 0 ? (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {characterLinks.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/character/${c.slug}`}
+                  className="inline-flex items-center gap-1.5 rounded-kawaii px-3 py-1.5 text-xs font-semibold shadow-sm ring-1 ring-kawaii-pink/30 transition hover:shadow-kawaii-hover"
+                  style={{ backgroundColor: `${c.hexColor}40` }}
+                >
+                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: c.hexColor }} />
+                  {c.name}
+                </Link>
+              ))}
+            </div>
+          ) : null}
 
           {product.variants.length > 1 ? (
             <div className="mt-5">
@@ -87,8 +110,8 @@ export function ProductDetail({ product }: { product: Product }) {
                       type="button"
                       onClick={() => setVariantId(v.id)}
                       className={[
-                        "min-h-11 rounded-kawaii px-4 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30",
-                        active ? "bg-kawaii-sky/40" : "bg-white/80 hover:bg-white",
+                        "min-h-11 rounded-kawaii px-4 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30 transition",
+                        active ? "bg-kawaii-sky/40 ring-kawaii-sky/60" : "bg-white/80 hover:bg-white",
                         v.stock <= 0 ? "opacity-55" : "",
                       ].join(" ")}
                     >
@@ -100,33 +123,20 @@ export function ProductDetail({ product }: { product: Product }) {
             </div>
           ) : null}
 
-          <div className="mt-6 grid gap-2">
-            <button
-              data-testid="add-to-cart"
-              type="button"
-              className="min-h-11 rounded-kawaii bg-kawaii-pink px-6 text-sm font-semibold shadow-sm transition hover:shadow-kawaii-hover disabled:opacity-60"
-              disabled={!variantId || (variant ? variant.stock <= 0 : true)}
-              onClick={() => {
-                const v = variant ?? product.variants[0]!;
-                cart.addItem({
-                  productSlug: product.slug,
-                  variantId: v.id,
-                  name: product.name,
-                  priceCents: v.priceCents ?? product.priceCents,
-                  qty: 1,
-                  sku: v.sku,
-                  imageUrl: product.images[0]?.url,
-                  maxPerCustomer: product.maxPerCustomer,
-                });
-              }}
-            >
-              Add to Cart
-            </button>
+          <div className="mt-6 grid gap-3">
+            <div className="rounded-kawaii bg-kawaii-cream/60 p-4 ring-1 ring-kawaii-pink/20">
+              <p className="text-sm font-semibold">Catalog Info</p>
+              <p className="mt-1 text-xs text-foreground/65">
+                {soldOut
+                  ? "This item is currently out of stock. Check back soon!"
+                  : "This item is available. Visit us in-store or contact us for purchase details."}
+              </p>
+            </div>
 
             {soldOut ? (
               <form data-testid="restock-form" className="rounded-kawaii bg-white/70 p-4 ring-1 ring-kawaii-pink/20">
                 <p className="text-sm font-semibold">Restock Notification</p>
-                <p className="mt-1 text-xs text-foreground/60">Get an email when it’s back.</p>
+                <p className="mt-1 text-xs text-foreground/60">Get an email when it&apos;s back.</p>
                 <input
                   className="mt-3 w-full rounded-kawaii bg-white px-4 py-3 text-sm shadow-sm ring-1 ring-kawaii-pink/30"
                   placeholder="you@example.com"
@@ -148,39 +158,16 @@ export function ProductDetail({ product }: { product: Product }) {
               {product.care ? <p className="mt-2"><span className="font-semibold">Care:</span> {product.care}</p> : null}
             </div>
           </details>
-        </section>
+        </motion.section>
       </div>
 
       <section className="rounded-kawaii-lg bg-white/70 p-8 shadow-sm ring-1 ring-kawaii-pink/30">
-        <h2 className="text-lg font-semibold">Frequently Bought Together</h2>
+        <h2 className="text-lg font-semibold">You May Also Like</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {fbt.map((p) => (
-            <ProductCard key={p.slug} product={p} />
+          {related.map((p, i) => (
+            <ProductCard key={p.slug} product={p} index={i} />
           ))}
         </div>
-        <button
-          data-testid="add-fbt"
-          type="button"
-          className="mt-5 min-h-11 rounded-kawaii bg-kawaii-peach/70 px-6 text-sm font-semibold shadow-sm"
-          onClick={() => {
-            for (const p of fbt) {
-              const v = p.variants[0]!;
-              if (v.stock <= 0) continue;
-              cart.addItem({
-                productSlug: p.slug,
-                variantId: v.id,
-                name: p.name,
-                priceCents: v.priceCents ?? p.priceCents,
-                qty: 1,
-                sku: v.sku,
-                imageUrl: p.images[0]?.url,
-                maxPerCustomer: p.maxPerCustomer,
-              });
-            }
-          }}
-        >
-          Add both to cart
-        </button>
       </section>
     </div>
   );

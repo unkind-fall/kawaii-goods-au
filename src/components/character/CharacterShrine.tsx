@@ -7,11 +7,14 @@ import { useEffect, useMemo, useState } from "react";
 import type { Character } from "@/lib/data/sample";
 import { SAMPLE_CHARACTERS, SAMPLE_PRODUCTS } from "@/lib/data/sample";
 import { ProductCard } from "@/components/product/ProductCard";
+import { useToast } from "@/components/ui/Toast";
 
 export function CharacterShrine({ character }: { character: Character }) {
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(12);
   const [expanded, setExpanded] = useState(false);
+  const [justLiked, setJustLiked] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const key = `kawaii_like_${character.slug}`;
@@ -34,6 +37,10 @@ export function CharacterShrine({ character }: { character: Character }) {
     setLiked(nextLiked);
     const nextCount = count + (nextLiked ? 1 : -1);
     setCount(nextCount);
+    if (nextLiked) {
+      setJustLiked(true);
+      setTimeout(() => setJustLiked(false), 600);
+    }
     const key = `kawaii_like_${character.slug}`;
     try {
       localStorage.setItem(key, JSON.stringify({ liked: nextLiked, count: nextCount }));
@@ -72,11 +79,11 @@ export function CharacterShrine({ character }: { character: Character }) {
         <Link className="hover:underline" href="/">
           Home
         </Link>{" "}
-        <span aria-hidden>›</span>{" "}
+        <span aria-hidden>&rsaquo;</span>{" "}
         <Link className="hover:underline" href="/characters">
           Characters
         </Link>{" "}
-        <span aria-hidden>›</span> <span className="font-semibold text-foreground/80">{character.name}</span>
+        <span aria-hidden>&rsaquo;</span> <span className="font-semibold text-foreground/80">{character.name}</span>
       </nav>
 
       <section
@@ -84,8 +91,20 @@ export function CharacterShrine({ character }: { character: Character }) {
         className="relative overflow-hidden rounded-kawaii-lg p-8 shadow-kawaii ring-1 ring-kawaii-pink/30"
         style={{ backgroundColor: character.hexColor }}
       >
+        {/* Soft gradient overlay */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(135deg, ${character.hexColor}CC 0%, transparent 60%)`,
+          }}
+        />
         <FloatingStamps />
-        <div className="relative z-10 max-w-2xl">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+          className="relative z-10 max-w-2xl"
+        >
           <p className="inline-flex rounded-kawaii bg-white/70 px-4 py-2 text-xs font-semibold text-foreground/75">
             Character Shrine
           </p>
@@ -96,10 +115,13 @@ export function CharacterShrine({ character }: { character: Character }) {
             <button
               data-testid="character-like"
               type="button"
-              className="inline-flex min-h-11 items-center gap-2 rounded-kawaii bg-white/80 px-5 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30"
+              className={[
+                "inline-flex min-h-11 items-center gap-2 rounded-kawaii bg-white/80 px-5 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30 transition",
+                justLiked ? "animate-heart-beat" : "",
+              ].join(" ")}
               onClick={toggleLike}
             >
-              <span aria-hidden>{liked ? "💗" : "🤍"}</span>
+              <span aria-hidden>{liked ? "\uD83D\uDC97" : "\uD83E\uDD0D"}</span>
               Like
               <span data-testid="character-like-count" className="text-xs text-foreground/70">
                 {count}
@@ -109,17 +131,18 @@ export function CharacterShrine({ character }: { character: Character }) {
             <button
               data-testid="character-share"
               type="button"
-              className="inline-flex min-h-11 items-center gap-2 rounded-kawaii bg-white/80 px-5 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30"
+              className="inline-flex min-h-11 items-center gap-2 rounded-kawaii bg-white/80 px-5 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30 transition hover:shadow-kawaii-hover"
               onClick={async () => {
                 const text = shareUrl || window.location.href;
                 await navigator.clipboard.writeText(text);
+                toast("Link copied!", "happy");
               }}
             >
-              <span aria-hidden>🔗</span>
+              <span aria-hidden>&#128279;</span>
               Share
             </button>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       <section className="grid gap-4 rounded-kawaii-lg bg-white/70 p-8 shadow-sm ring-1 ring-kawaii-pink/30">
@@ -150,7 +173,7 @@ export function CharacterShrine({ character }: { character: Character }) {
           <button
             data-testid="character-read-more"
             type="button"
-            className="mt-2 inline-flex rounded-kawaii bg-kawaii-lavender/40 px-4 py-2 text-xs font-semibold"
+            className="mt-2 inline-flex rounded-kawaii bg-kawaii-lavender/40 px-4 py-2 text-xs font-semibold transition hover:bg-kawaii-lavender/60"
             onClick={() => setExpanded((v) => !v)}
           >
             {expanded ? "Show Less" : "Read More"}
@@ -166,6 +189,7 @@ export function CharacterShrine({ character }: { character: Character }) {
               key={f.slug}
               href={`/character/${f.slug}`}
               className="rounded-kawaii bg-white/70 p-4 shadow-sm ring-1 ring-kawaii-pink/20 transition hover:-translate-y-0.5 hover:shadow-kawaii-hover"
+              style={{ borderLeft: `3px solid ${f.hexColor}` }}
             >
               <p className="text-sm font-semibold">{f.name}</p>
               <p className="mt-1 text-xs text-foreground/60">{f.type === "main" ? "Main" : "Sub-character"}</p>
@@ -178,8 +202,8 @@ export function CharacterShrine({ character }: { character: Character }) {
       <section className="rounded-kawaii-lg bg-white/70 p-8 shadow-sm ring-1 ring-kawaii-pink/30">
         <h2 className="text-lg font-semibold">Related Products</h2>
         <div data-testid="related-products" className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {relatedProducts.map((p) => (
-            <ProductCard key={p.slug} product={p} />
+          {relatedProducts.map((p, i) => (
+            <ProductCard key={p.slug} product={p} index={i} />
           ))}
           {relatedProducts.length === 0 ? <p className="text-sm text-foreground/70">No products yet.</p> : null}
         </div>
@@ -189,7 +213,7 @@ export function CharacterShrine({ character }: { character: Character }) {
         <div>
           {prev ? (
             <Link data-testid="character-prev" className="text-sm font-semibold hover:underline" href={`/character/${prev.slug}`}>
-              ← {prev.name}
+              &larr; {prev.name}
             </Link>
           ) : (
             <span />
@@ -198,7 +222,7 @@ export function CharacterShrine({ character }: { character: Character }) {
         <div>
           {next ? (
             <Link data-testid="character-next" className="text-sm font-semibold hover:underline" href={`/character/${next.slug}`}>
-              {next.name} →
+              {next.name} &rarr;
             </Link>
           ) : (
             <span />
@@ -213,20 +237,33 @@ function FloatingStamps() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 opacity-50">
       <motion.div
-        className="absolute left-6 top-6 h-10 w-10 rounded-kawaii bg-white/40"
+        className="absolute left-6 top-6 text-lg"
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      />
+      >
+        &#9829;
+      </motion.div>
       <motion.div
-        className="absolute right-10 top-10 h-12 w-12 rounded-full bg-white/30"
-        animate={{ y: [0, -8, 0], rotate: [0, 6, 0] }}
+        className="absolute right-10 top-10 text-xl"
+        animate={{ y: [0, -8, 0], rotate: [0, 12, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      />
+      >
+        &#10022;
+      </motion.div>
       <motion.div
-        className="absolute bottom-8 left-1/3 h-9 w-9 rounded-kawaii bg-white/35"
+        className="absolute bottom-8 left-1/3 text-lg"
         animate={{ y: [0, -7, 0] }}
         transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
-      />
+      >
+        &#9733;
+      </motion.div>
+      <motion.div
+        className="absolute bottom-12 right-1/4 text-sm"
+        animate={{ y: [0, -5, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        &#9825;
+      </motion.div>
     </div>
   );
 }

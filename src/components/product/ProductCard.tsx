@@ -7,17 +7,20 @@ import { useMemo, useState } from "react";
 
 import type { Product } from "@/lib/data/sample";
 import { formatAud } from "@/lib/utils/format";
-import { useCart } from "@/lib/cart/store";
+import { useFavorites } from "@/lib/favorites/store";
+import { useToast } from "@/components/ui/Toast";
 
 export function ProductCard({
   product,
-  onQuickAdd,
+  index = 0,
 }: {
   product: Product;
-  onQuickAdd?: (slug: string) => void;
+  index?: number;
 }) {
   const [hover, setHover] = useState(false);
-  const cart = useCart();
+  const { isFavorite, toggle } = useFavorites();
+  const { toast } = useToast();
+  const faved = isFavorite(product.slug);
 
   const soldOut = product.badges.includes("sold_out") || product.variants.every((v) => v.stock <= 0);
   const isNew = product.badges.includes("new");
@@ -33,7 +36,12 @@ export function ProductCard({
   }, [product.priceCents]);
 
   return (
-    <motion.div whileHover={{ y: -6 }} transition={{ type: "spring", stiffness: 260, damping: 18 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 260, damping: 22, delay: index * 0.05 }}
+      whileHover={{ y: -6 }}
+    >
       <div
         className="group overflow-hidden rounded-kawaii-lg bg-white/70 shadow-sm ring-1 ring-kawaii-pink/30 transition hover:shadow-kawaii-hover"
         onMouseEnter={() => setHover(true)}
@@ -43,15 +51,29 @@ export function ProductCard({
         <div className="relative aspect-square overflow-hidden bg-kawaii-cream">
           <Link href={`/product/${product.slug}`} aria-label={product.name} className="absolute inset-0">
             <Image
-              src={img.url}
-              alt={img.alt}
+              src={primary?.url ?? ""}
+              alt={primary?.alt ?? product.name}
               fill
               sizes="(max-width: 640px) 50vw, 25vw"
               data-testid="product-image"
-              data-src={img.url}
+              data-src={img?.url}
               className={[
-                "object-cover transition",
+                "object-cover transition-opacity duration-300",
                 soldOut ? "grayscale opacity-60" : "group-hover:scale-[1.02]",
+                hover ? "opacity-0" : "opacity-100",
+              ].join(" ")}
+              placeholder="blur"
+              blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            />
+            <Image
+              src={secondary?.url ?? ""}
+              alt={secondary?.alt ?? product.name}
+              fill
+              sizes="(max-width: 640px) 50vw, 25vw"
+              className={[
+                "object-cover transition-opacity duration-300",
+                soldOut ? "grayscale opacity-60" : "group-hover:scale-[1.02]",
+                hover ? "opacity-100" : "opacity-0",
               ].join(" ")}
               placeholder="blur"
               blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
@@ -67,10 +89,18 @@ export function ProductCard({
           <button
             data-testid="product-fav"
             type="button"
-            className="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-kawaii bg-white/85 shadow-sm ring-1 ring-kawaii-pink/30"
-            aria-label="Favorite"
+            className={[
+              "absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-kawaii shadow-sm ring-1 ring-kawaii-pink/30 transition active:animate-pop",
+              faved ? "bg-kawaii-pink/30" : "bg-white/85",
+            ].join(" ")}
+            aria-label={faved ? "Remove from favorites" : "Add to favorites"}
+            onClick={(e) => {
+              e.preventDefault();
+              const added = toggle(product.slug);
+              toast(added ? "Added to favorites!" : "Removed from favorites", added ? "happy" : "sad");
+            }}
           >
-            <span aria-hidden>♡</span>
+            <span aria-hidden>{faved ? "\u2665" : "\u2661"}</span>
           </button>
         </div>
 
@@ -85,37 +115,17 @@ export function ProductCard({
             ) : null}
           </div>
 
-          <div className="mt-3 flex gap-2">
-            <button
-              data-testid="product-quick-add"
-              type="button"
-              className="min-h-11 flex-1 rounded-kawaii bg-kawaii-pink px-4 text-xs font-semibold shadow-sm transition hover:shadow-kawaii-hover disabled:opacity-60"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onQuickAdd) onQuickAdd(product.slug);
-                else {
-                  const v = product.variants[0]!;
-                  cart.addItem({
-                    productSlug: product.slug,
-                    variantId: v.id,
-                    name: product.name,
-                    priceCents: v.priceCents ?? product.priceCents,
-                    qty: 1,
-                    sku: v.sku,
-                    imageUrl: product.images[0]?.url,
-                    maxPerCustomer: product.maxPerCustomer,
-                  });
-                }
-              }}
-              disabled={soldOut}
-            >
-              Quick Add
-            </button>
+          {product.characterTags.length > 0 ? (
+            <div className="mt-2 h-1 w-12 rounded-full bg-kawaii-pink/50" />
+          ) : null}
+
+          <div className="mt-3">
             <Link
-              className="inline-flex min-h-11 items-center justify-center rounded-kawaii bg-white/80 px-4 text-xs font-semibold shadow-sm ring-1 ring-kawaii-pink/30"
+              data-testid="product-view-details"
+              className="inline-flex min-h-11 w-full items-center justify-center rounded-kawaii bg-kawaii-pink px-4 text-xs font-semibold shadow-sm transition hover:shadow-kawaii-hover"
               href={`/product/${product.slug}`}
             >
-              View
+              View Details
             </Link>
           </div>
         </div>

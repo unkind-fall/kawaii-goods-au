@@ -42,23 +42,8 @@ test("[E2E] Search handles synonyms (Kitty -> Hello Kitty) and maintains filters
   await expect(page).toHaveURL(/q=hello(\+|%20)kitty/);
 });
 
-test("[E2E] Clicking Quick Add opens drawer, does not navigate", async ({ page }) => {
+test("[E2E] View Details link navigates to PDP", async ({ page }) => {
   await page.goto("/products");
-  await page.getByTestId("product-card-hello-kitty-sticker-pack").getByTestId("product-quick-add").click();
-  await expect(page.getByTestId("quick-add-drawer")).toBeVisible();
-  await expect(page).toHaveURL(/\/products/);
-});
-
-test("[E2E] Add to Cart triggers flying item animation to cart icon", async ({ page }) => {
-  await page.goto("/product/hello-kitty-sticker-pack");
-  await page.getByTestId("add-to-cart").click();
-  await expect(page.getByTestId("fly-item")).toBeVisible();
-  await expect(page.getByTestId("cart-count")).toBeVisible();
-});
-
-test("[E2E] Frequently Bought Together adds multiple to cart", async ({ page }) => {
-  await page.goto("/product/hello-kitty-sticker-pack");
-  await page.getByTestId("add-fbt").click();
-  const count = await page.getByTestId("cart-count").textContent();
-  expect(Number(count)).toBeGreaterThan(0);
+  await page.getByTestId("product-card-hello-kitty-sticker-pack").getByTestId("product-view-details").click();
+  await expect(page).toHaveURL(/\/product\/hello-kitty-sticker-pack/);
 });

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Kosugi_Maru, Noto_Sans_JP } from "next/font/google";
 import "@/styles/globals.css";
@@ -5,6 +6,8 @@ import { Header } from "@/components/layout/Header";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { Footer } from "@/components/layout/Footer";
 import { BackToTopButton } from "@/components/layout/BackToTopButton";
+import { PageTransition } from "@/components/ui/PageTransition";
+import { Providers } from "./providers";
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
@@ -34,13 +37,21 @@ export default function RootLayout({
       <body
         className={`${notoSansJp.variable} ${kosugiMaru.variable} font-sans antialiased`}
       >
-        <Header />
-        <main className="mx-auto min-h-dvh max-w-6xl px-4 pb-28 pt-6 sm:pb-0">
-          {children}
-        </main>
-        <Footer />
-        <MobileBottomNav />
-        <BackToTopButton />
+        <Providers>
+          <Suspense>
+            <Header />
+          </Suspense>
+          <main className="mx-auto min-h-dvh max-w-6xl px-4 pb-28 pt-6 sm:pb-0">
+            <Suspense>
+              <PageTransition>{children}</PageTransition>
+            </Suspense>
+          </main>
+          <Footer />
+          <Suspense>
+            <MobileBottomNav />
+          </Suspense>
+          <BackToTopButton />
+        </Providers>
       </body>
     </html>
   );

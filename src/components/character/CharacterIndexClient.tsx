@@ -1,8 +1,11 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { Character } from "@/lib/data/sample";
+import { CharacterCard } from "./CharacterCard";
+import { CharacterCardSkeleton } from "@/components/ui/KawaiiSkeleton";
 
 type ApiResponse = { items: Character[]; nextCursor: number | null; total: number };
 
@@ -11,7 +14,7 @@ export function CharacterIndexClient() {
   const [q, setQ] = useState("");
   const [items, setItems] = useState<Character[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -31,6 +34,7 @@ export function CharacterIndexClient() {
     return () => {
       alive = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryKey]);
 
   useEffect(() => {
@@ -65,7 +69,7 @@ export function CharacterIndexClient() {
 
   return (
     <div>
-      <div className="flex flex-col gap-3 rounded-kawaii-lg bg-white/70 p-5 shadow-sm ring-1 ring-kawaii-pink/30 sm:flex-row sm:items-end">
+      <div className="flex flex-col gap-3 rounded-kawaii-lg bg-white/70 p-5 shadow-kawaii-sm ring-1 ring-kawaii-pink/30 sm:flex-row sm:items-end">
         <div className="flex-1">
           <label className="text-xs font-semibold text-foreground/70" htmlFor="character-search">
             Search
@@ -98,23 +102,36 @@ export function CharacterIndexClient() {
 
       {items.length === 0 && !loading ? (
         <div data-testid="sad-mascot" className="mt-8 rounded-kawaii-lg bg-white/70 p-8 text-center shadow-sm ring-1 ring-kawaii-pink/30">
-          <p className="text-2xl" aria-hidden>
-            (｡•́︿•̀｡)
-          </p>
-          <p className="mt-2 text-sm text-foreground/70">No characters found. Try a different search.</p>
+          <motion.p
+            className="text-3xl"
+            aria-hidden
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            &#65288;&#12290;&#8226;&#769;&#65103;&#8226;&#768;&#12290;&#65289;
+          </motion.p>
+          <p className="mt-3 text-sm text-foreground/70">No characters found. Try a different search.</p>
         </div>
       ) : null}
 
-      <div data-testid="character-grid" className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {items.map((c) => (
+      {items.length === 0 && loading ? (
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <CharacterCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : null}
+
+      <motion.div
+        data-testid="character-grid"
+        className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {items.map((c, i) => (
           <div key={c.slug} data-testid="character-grid-item">
-            {/* lazy image handled inside card */}
-            {/** */}
-            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
-            <CharacterCardLazy character={c} />
+            <CharacterCard character={c} index={i} />
           </div>
         ))}
-      </div>
+      </motion.div>
 
       <div ref={sentinelRef} className="h-10" />
 
@@ -123,7 +140,7 @@ export function CharacterIndexClient() {
           <button
             data-testid="characters-load-more"
             type="button"
-            className="min-h-11 rounded-kawaii bg-white/80 px-6 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30 transition hover:bg-white"
+            className="min-h-11 rounded-kawaii bg-white/80 px-6 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30 transition hover:bg-white hover:shadow-kawaii-hover"
             onClick={() => void loadMore()}
             disabled={loading}
           >
@@ -134,10 +151,3 @@ export function CharacterIndexClient() {
     </div>
   );
 }
-
-// Local import to keep module graph simple for now.
-import { CharacterCard } from "./CharacterCard";
-function CharacterCardLazy({ character }: { character: Character }) {
-  return <CharacterCard character={character} />;
-}
-

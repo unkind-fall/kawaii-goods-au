@@ -22,10 +22,36 @@ body {
 body {
   color: var(--foreground);
   background-color: var(--background);
-  /* Subtle dot pattern, common on "fancy goods" sites */
-  background-image: radial-gradient(rgba(255, 182, 193, 0.22) 1px, transparent 1px);
-  background-size: 18px 18px;
+  /* Dual-layer dot pattern for extra depth */
+  background-image: radial-gradient(rgba(255, 182, 193, 0.22) 1px, transparent 1px),
+    radial-gradient(rgba(135, 206, 235, 0.15) 1px, transparent 1px);
+  background-size: 18px 18px, 24px 24px;
+  background-position: 0 0, 9px 9px;
   overflow-x: hidden;
+}
+
+/* Pink selection highlight */
+::selection {
+  background-color: rgba(255, 182, 193, 0.4);
+  color: var(--foreground);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--kawaii-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--kawaii-pink);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f5a0b0;
 }
 
 @layer base {
@@ -42,3 +68,18 @@ body {
   }
 }
 
+/* Page content entrance animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out both;
+}
