@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fff8e7; /* kawaii.cream */
+  --foreground: #1f2937; /* slate-800-ish for readability */
+
+  --kawaii-pink: #ffb6c1;
+  --kawaii-cream: #fff8e7;
+  --kawaii-mint: #98d8c8;
+  --kawaii-lavender: #e6e6fa;
+  --kawaii-peach: #ffdab9;
+  --kawaii-sky: #87ceeb;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  /* Subtle dot pattern, common on "fancy goods" sites */
+  background-image: radial-gradient(rgba(255, 182, 193, 0.22) 1px, transparent 1px);
+  background-size: 18px 18px;
+  overflow-x: hidden;
+}
+
+@layer base {
+  *:focus-visible {
+    outline: 2px solid var(--kawaii-sky);
+    outline-offset: 3px;
+    border-radius: 0.75rem;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+

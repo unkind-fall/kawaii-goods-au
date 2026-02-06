@@ -1,101 +1,80 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+const FEATURED = [
+  { title: "Sanrio Stationery", desc: "Pens, stickers, and notebooks.", href: "/products?tag=stationery" },
+  { title: "Character Plush", desc: "Soft friends for your desk.", href: "/products?tag=plush" },
+  { title: "Tiny Accessories", desc: "Keychains, pouches, charms.", href: "/products?tag=accessories" },
+  { title: "New Arrivals", desc: "Fresh drops every week.", href: "/new" },
+];
+
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="grid gap-10">
+      <section className="relative overflow-hidden rounded-kawaii-lg bg-white/70 p-8 shadow-kawaii ring-1 ring-kawaii-pink/30">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-kawaii-sky/30 blur-2xl"
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-12 -left-12 h-44 w-44 rounded-full bg-kawaii-pink/30 blur-2xl"
+        />
+        <p className="inline-flex rounded-kawaii bg-kawaii-lavender/40 px-4 py-2 text-xs font-semibold text-foreground/75">
+          AU shipping, JP vibes
+        </p>
+        <h1 className="mt-4 text-balance text-3xl font-semibold sm:text-4xl">
+          Character goods that feel like a tiny Tokyo stationery aisle
+        </h1>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-foreground/75">
+          Rounded corners. Pastel colors. Little micro-interactions. This is the foundation for the full store build.
+        </p>
+        <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+          <Link
+            href="/characters"
+            className="inline-flex min-h-11 items-center justify-center rounded-kawaii bg-kawaii-pink px-6 text-sm font-semibold shadow-sm transition hover:shadow-kawaii-hover"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Browse characters
+          </Link>
+          <Link
+            href="/products"
+            className="inline-flex min-h-11 items-center justify-center rounded-kawaii bg-white/80 px-6 text-sm font-semibold shadow-sm ring-1 ring-kawaii-pink/30 transition hover:bg-white"
           >
-            Read our docs
-          </a>
+            Shop products
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      <section aria-label="Featured categories" className="grid gap-4 sm:grid-cols-2">
+        {FEATURED.map((c) => (
+          <Link
+            key={c.href}
+            href={c.href}
+            className="group rounded-kawaii-lg bg-white/70 p-6 shadow-sm ring-1 ring-kawaii-pink/30 transition hover:-translate-y-0.5 hover:shadow-kawaii-hover"
+          >
+            <p className="text-base font-semibold">{c.title}</p>
+            <p className="mt-1 text-sm text-foreground/70">{c.desc}</p>
+            <p className="mt-4 text-xs font-semibold text-foreground/60 group-hover:text-foreground/80">
+              Explore →
+            </p>
+          </Link>
+        ))}
+      </section>
+
+      {/* Extra content to enable Back-to-Top behavior during E2E. */}
+      <section aria-label="Atmosphere" className="grid gap-3">
+        {Array.from({ length: 18 }).map((_, i) => (
+          <div
+            key={i}
+            className="rounded-kawaii-lg bg-white/50 p-5 shadow-sm ring-1 ring-kawaii-pink/20"
+          >
+            <p className="text-sm font-semibold">Kawaii detail #{i + 1}</p>
+            <p className="mt-1 text-sm text-foreground/70">
+              Soft shadows, comfy spacing, and playful rounded geometry.
+            </p>
+          </div>
+        ))}
+      </section>
     </div>
   );
 }
+
