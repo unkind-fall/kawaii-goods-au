@@ -114,7 +114,7 @@ export default function ProductsPage() {
   return (
     <div className="grid gap-6">
       <div className="rounded-kawaii-lg bg-white/70 p-8 shadow-kawaii ring-1 ring-kawaii-pink/30">
-        <h1 className="text-2xl font-semibold">Products</h1>
+        <h1 className="font-display text-2xl font-bold">Products</h1>
         <p className="mt-2 text-sm text-foreground/70">High-density grids, clear prices, and cute badges.</p>
       </div>
 

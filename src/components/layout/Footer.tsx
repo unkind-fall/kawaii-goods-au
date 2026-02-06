@@ -21,7 +21,7 @@ export function Footer() {
             <div className="flex items-start gap-4">
               <Mascot />
               <div>
-                <p className="text-base font-semibold">Newsletter of Cute Things</p>
+                <p className="font-display text-base font-bold">Newsletter of Cute Things</p>
                 <p className="mt-1 text-sm text-foreground/70">
                   Drops, restocks, and character spotlights. No spam, just kawaii.
                 </p>
@@ -77,7 +77,7 @@ export function Footer() {
 
           <div className="grid gap-4 text-sm">
             <div className="rounded-kawaii-lg bg-white/70 p-6 shadow-sm ring-1 ring-kawaii-pink/30">
-              <p className="font-semibold">Customer Care</p>
+              <p className="font-display font-bold">Customer Care</p>
               <ul className="mt-2 grid gap-1 text-foreground/75">
                 <li>Shipping (AU)</li>
                 <li>Returns</li>
@@ -86,7 +86,7 @@ export function Footer() {
             </div>
 
             <div className="rounded-kawaii-lg bg-white/70 p-6 shadow-sm ring-1 ring-kawaii-pink/30">
-              <p className="font-semibold">Follow</p>
+              <p className="font-display font-bold">Follow</p>
               <div className="mt-2 flex gap-2">
                 <a
                   className="inline-flex h-11 w-11 items-center justify-center rounded-kawaii bg-white shadow-sm ring-1 ring-kawaii-pink/30 transition hover:bg-kawaii-sky/30 hover:shadow-kawaii-hover"

@@ -22,8 +22,8 @@ export default function NewArrivalsPage() {
           aria-hidden
           className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-kawaii-mint/30 blur-2xl"
         />
-        <span className="inline-flex rounded-kawaii bg-kawaii-mint/50 px-3 py-1 text-[11px] font-semibold">New</span>
-        <h1 className="mt-3 text-2xl font-semibold">New Arrivals</h1>
+        <span className="inline-flex rounded-kawaii bg-kawaii-mint/70 px-3 py-1 text-[11px] font-bold shadow-kawaii-mint">New</span>
+        <h1 className="mt-3 font-display text-2xl font-bold">New Arrivals</h1>
         <p className="mt-2 text-sm text-foreground/70">The latest additions to our catalog.</p>
       </div>
 

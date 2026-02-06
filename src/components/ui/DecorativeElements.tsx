@@ -3,12 +3,22 @@
 import { motion } from "framer-motion";
 
 const HEARTS = [
-  { left: "8%", top: "12%", size: 14, delay: 0, duration: 3.2 },
-  { left: "85%", top: "18%", size: 10, delay: 0.6, duration: 4 },
-  { left: "22%", top: "75%", size: 12, delay: 1.2, duration: 3.6 },
-  { left: "70%", top: "65%", size: 16, delay: 0.3, duration: 3.8 },
-  { left: "50%", top: "8%", size: 11, delay: 0.9, duration: 3.4 },
-  { left: "92%", top: "50%", size: 9, delay: 1.5, duration: 4.2 },
+  { left: "8%", top: "12%", size: 16, delay: 0, duration: 3.2 },
+  { left: "85%", top: "18%", size: 12, delay: 0.6, duration: 4 },
+  { left: "22%", top: "75%", size: 14, delay: 1.2, duration: 3.6 },
+  { left: "70%", top: "65%", size: 18, delay: 0.3, duration: 3.8 },
+  { left: "50%", top: "8%", size: 13, delay: 0.9, duration: 3.4 },
+  { left: "92%", top: "50%", size: 11, delay: 1.5, duration: 4.2 },
+];
+
+const HEART_CHARS = ["\u2665", "\u2764\uFE0F", "\u2661", "\u2665", "\u2764\uFE0F", "\u2661"];
+const HEART_COLORS = [
+  "text-kawaii-pink/50",
+  "text-kawaii-peach/50",
+  "text-kawaii-pink/40",
+  "text-kawaii-lavender/60",
+  "text-kawaii-pink/45",
+  "text-kawaii-sky/40",
 ];
 
 export function FloatingHearts({ count = 6 }: { count?: number }) {
@@ -17,12 +27,12 @@ export function FloatingHearts({ count = 6 }: { count?: number }) {
       {HEARTS.slice(0, count).map((h, i) => (
         <motion.span
           key={i}
-          className="absolute text-kawaii-pink/40"
+          className={`absolute ${HEART_COLORS[i % HEART_COLORS.length]}`}
           style={{ left: h.left, top: h.top, fontSize: h.size }}
-          animate={{ y: [0, -8, 0], opacity: [0.3, 0.6, 0.3] }}
+          animate={{ y: [0, -10, 0], opacity: [0.35, 0.7, 0.35], rotate: [0, 8, -8, 0] }}
           transition={{ duration: h.duration, repeat: Infinity, ease: "easeInOut", delay: h.delay }}
         >
-          &#9829;
+          {HEART_CHARS[i % HEART_CHARS.length]}
         </motion.span>
       ))}
     </div>
@@ -37,18 +47,27 @@ const SPARKLES = [
   { left: "5%", top: "60%", delay: 0.6, duration: 2.6 },
 ];
 
+const SPARKLE_CHARS = ["\u2728", "\u2B50", "\u2734\uFE0F", "\u2728", "\u2B50"];
+const SPARKLE_COLORS = [
+  "text-kawaii-peach/60",
+  "text-kawaii-pink/50",
+  "text-kawaii-sky/50",
+  "text-kawaii-mint/60",
+  "text-kawaii-lavender/60",
+];
+
 export function SparkleEffect({ count = 5 }: { count?: number }) {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       {SPARKLES.slice(0, count).map((s, i) => (
         <motion.span
           key={i}
-          className="absolute text-sm text-kawaii-peach/50"
+          className={`absolute text-sm ${SPARKLE_COLORS[i % SPARKLE_COLORS.length]}`}
           style={{ left: s.left, top: s.top }}
-          animate={{ scale: [0.6, 1.2, 0.6], opacity: [0.2, 0.7, 0.2] }}
+          animate={{ scale: [0.5, 1.3, 0.5], opacity: [0.2, 0.8, 0.2], rotate: [0, 180, 360] }}
           transition={{ duration: s.duration, repeat: Infinity, ease: "easeInOut", delay: s.delay }}
         >
-          &#10022;
+          {SPARKLE_CHARS[i % SPARKLE_CHARS.length]}
         </motion.span>
       ))}
     </div>

@@ -44,7 +44,7 @@ export default function SearchPage() {
           aria-hidden
           className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-kawaii-sky/30 blur-2xl"
         />
-        <h1 className="text-2xl font-semibold">Search</h1>
+        <h1 className="font-display text-2xl font-bold">Search</h1>
         <form
           className="mt-4"
           onSubmit={(e) => {
@@ -89,7 +89,7 @@ export default function SearchPage() {
 
       {matchedCharacters.length > 0 ? (
         <section>
-          <h2 className="text-lg font-semibold">Characters</h2>
+          <h2 className="font-display text-lg font-bold">Characters</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {matchedCharacters.map((c, i) => (
               <CharacterCard key={c.slug} character={c} index={i} />
@@ -100,7 +100,7 @@ export default function SearchPage() {
 
       {matchedProducts.length > 0 ? (
         <section>
-          <h2 className="text-lg font-semibold">Products</h2>
+          <h2 className="font-display text-lg font-bold">Products</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {matchedProducts.map((p, i) => (
               <ProductCard key={p.slug} product={p} index={i} />

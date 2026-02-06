@@ -22,8 +22,8 @@ export default function SalePage() {
           aria-hidden
           className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-kawaii-peach/30 blur-2xl"
         />
-        <span className="inline-flex rounded-kawaii bg-kawaii-peach/70 px-3 py-1 text-[11px] font-semibold">Sale</span>
-        <h1 className="mt-3 text-2xl font-semibold">Sale</h1>
+        <span className="inline-flex rounded-kawaii bg-kawaii-peach/80 px-3 py-1 text-[11px] font-bold shadow-kawaii">Sale</span>
+        <h1 className="mt-3 font-display text-2xl font-bold">Sale</h1>
         <p className="mt-2 text-sm text-foreground/70">Grab these kawaii deals before they&apos;re gone.</p>
       </div>
 

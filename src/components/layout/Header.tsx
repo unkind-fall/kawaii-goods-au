@@ -72,7 +72,7 @@ export function Header() {
 
           <Link
             href="/"
-            className="col-start-2 justify-self-center text-center text-lg font-semibold tracking-tight sm:col-start-1 sm:justify-self-start sm:text-left"
+            className="col-start-2 justify-self-center text-center font-display text-lg font-bold tracking-tight sm:col-start-1 sm:justify-self-start sm:text-left"
           >
             <span className="inline-flex items-center gap-2">
               <span

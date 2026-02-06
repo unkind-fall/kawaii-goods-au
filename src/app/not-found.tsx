@@ -31,7 +31,7 @@ export default function NotFound() {
             <span className="text-4xl">&#9734;</span>
           </motion.div>
           <p className="text-sm font-semibold text-foreground/70">404</p>
-          <h1 className="mt-2 text-2xl font-semibold">Page not found</h1>
+          <h1 className="mt-2 font-display text-2xl font-bold">Page not found</h1>
           <p className="mt-2 text-sm text-foreground/60">
             This page wandered off into the pastel void...
           </p>

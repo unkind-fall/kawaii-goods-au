@@ -40,10 +40,10 @@ export function ProductCard({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 260, damping: 22, delay: index * 0.05 }}
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -6, rotate: [-0.5, 0.8, -0.5, 0] }}
     >
       <div
-        className="group overflow-hidden rounded-kawaii-lg bg-white/70 shadow-sm ring-1 ring-kawaii-pink/30 transition hover:shadow-kawaii-hover"
+        className="group overflow-hidden rounded-kawaii-lg bg-white/75 shadow-kawaii-sm ring-1 ring-kawaii-pink/30 transition hover:shadow-kawaii-hover"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         data-testid={`product-card-${product.slug}`}
@@ -105,7 +105,7 @@ export function ProductCard({
         </div>
 
         <div className="p-4">
-          <p className="text-sm font-semibold">{product.name}</p>
+          <p className="font-display text-sm font-bold">{product.name}</p>
           <div className="mt-1 flex items-center gap-2">
             <p data-testid="product-price" className="text-sm font-semibold text-foreground/90">
               {displayPrice}
@@ -138,12 +138,12 @@ function Badge({ kind }: { kind: "new" | "sale" | "sold_out" }) {
   const label = kind === "new" ? "New" : kind === "sale" ? "Sale" : "Sold Out";
   const cls =
     kind === "new"
-      ? "bg-kawaii-mint/70"
+      ? "bg-kawaii-mint/80 shadow-kawaii-mint"
       : kind === "sale"
-        ? "bg-kawaii-peach/80"
+        ? "bg-kawaii-peach/90 shadow-kawaii"
         : "bg-foreground/15";
   return (
-    <span className={`inline-flex items-center rounded-kawaii px-3 py-1 text-[11px] font-semibold ${cls}`}>
+    <span className={`inline-flex items-center rounded-kawaii px-3 py-1 text-[11px] font-bold ${cls}`}>
       {label}
     </span>
   );

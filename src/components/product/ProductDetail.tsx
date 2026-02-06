@@ -53,7 +53,7 @@ export function ProductDetail({ product }: { product: Product }) {
         >
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-semibold">{product.name}</h1>
+              <h1 className="font-display text-2xl font-bold">{product.name}</h1>
               <p className="mt-2 text-sm text-foreground/70">{product.description}</p>
             </div>
           </div>
@@ -162,7 +162,7 @@ export function ProductDetail({ product }: { product: Product }) {
       </div>
 
       <section className="rounded-kawaii-lg bg-white/70 p-8 shadow-sm ring-1 ring-kawaii-pink/30">
-        <h2 className="text-lg font-semibold">You May Also Like</h2>
+        <h2 className="font-display text-lg font-bold">You May Also Like</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {related.map((p, i) => (
             <ProductCard key={p.slug} product={p} index={i} />

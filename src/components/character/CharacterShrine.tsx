@@ -88,7 +88,7 @@ export function CharacterShrine({ character }: { character: Character }) {
 
       <section
         data-testid="character-hero"
-        className="relative overflow-hidden rounded-kawaii-lg p-8 shadow-kawaii ring-1 ring-kawaii-pink/30"
+        className="relative overflow-hidden rounded-kawaii-lg p-8 shadow-kawaii-lg ring-1 ring-kawaii-pink/40 sm:p-10"
         style={{ backgroundColor: character.hexColor }}
       >
         {/* Soft gradient overlay */}
@@ -108,7 +108,7 @@ export function CharacterShrine({ character }: { character: Character }) {
           <p className="inline-flex rounded-kawaii bg-white/70 px-4 py-2 text-xs font-semibold text-foreground/75">
             Character Shrine
           </p>
-          <h1 className="mt-4 text-balance text-3xl font-semibold">{character.name}</h1>
+          <h1 className="mt-4 text-balance font-display text-3xl font-bold sm:text-4xl">{character.name}</h1>
           <p className="mt-2 text-sm text-foreground/75">A gentle spotlight on a very cute friend.</p>
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -146,7 +146,7 @@ export function CharacterShrine({ character }: { character: Character }) {
       </section>
 
       <section className="grid gap-4 rounded-kawaii-lg bg-white/70 p-8 shadow-sm ring-1 ring-kawaii-pink/30">
-        <h2 className="text-lg font-semibold">About</h2>
+        <h2 className="font-display text-lg font-bold">About</h2>
 
         {character.birthday ? (
           <p data-testid="character-birthday" className="text-sm text-foreground/75">
@@ -182,7 +182,7 @@ export function CharacterShrine({ character }: { character: Character }) {
       </section>
 
       <section className="rounded-kawaii-lg bg-white/70 p-8 shadow-sm ring-1 ring-kawaii-pink/30">
-        <h2 className="text-lg font-semibold">Related Friends</h2>
+        <h2 className="font-display text-lg font-bold">Related Friends</h2>
         <div data-testid="related-friends" className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {friends.map((f) => (
             <Link
@@ -200,7 +200,7 @@ export function CharacterShrine({ character }: { character: Character }) {
       </section>
 
       <section className="rounded-kawaii-lg bg-white/70 p-8 shadow-sm ring-1 ring-kawaii-pink/30">
-        <h2 className="text-lg font-semibold">Related Products</h2>
+        <h2 className="font-display text-lg font-bold">Related Products</h2>
         <div data-testid="related-products" className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {relatedProducts.map((p, i) => (
             <ProductCard key={p.slug} product={p} index={i} />
